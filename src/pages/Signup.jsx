@@ -18,32 +18,32 @@ const Signup = () => {
     //     }
     // }
     return (
-        <div className='bg-amber-200 h-screen flex justify-center items-center'>
-            <div className='bg-gray-800 w-[40%] h-[60%] text-amber-200 rounded-3xl flex flex-col space-y-5 items-center'>
+        <div className=' h-screen flex justify-center items-center'>
+            <div className='bg-gray-200 hover:w-[42%] hover:h-[62%] hover:shadow-gray-500  w-[40%] h-[60%] text-black  rounded-3xl flex flex-col space-y-5 items-center'>
                 <p className='text-4xl p-5'>Signup</p>
                 <div className='flex space-x-2   w-[80%] justify-between '>
-                    <p className='bg-amber-500 w-[25%] text-white rounded p-1 text-center'>Name</p>
+                    <p className='bg-white  w-[25%] text-black rounded p-1 text-center'>Name</p>
                     <input
                         type="text"
                         placeholder="userName"
                         onChange={handleChange}
-                        className='bg-white text-gray-500 w-[60%] border border-amber-200 border-4 rounded' />
+                        className='bg-white text-gray-500 w-[60%]   rounded' />
                 </div>
                 <div className='flex space-x-2   w-[80%] justify-between '>
-                    <p className='bg-amber-500 w-[25%] text-white rounded p-1 text-center'>Email</p>
+                    <p className='bg-white  w-[25%] text-black rounded p-1 text-center'>Email</p>
                     <input type="text"
                         placeholder='Enter Email'
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] border border-amber-200 border-4 rounded' />
+                        className='bg-white text-gray-400 w-[60%] rounded' />
                 </div>
                 <div className='flex space-x-  w-[80%] justify-between'>
-                    <p className='bg-amber-500 w-[25%] text-center text-white rounded p-1'>Password</p>
+                    <p className='bg-white w-[25%] text-center text-black rounded p-1'>Password</p>
                     <input type="text"
                         placeholder='Enter Password'
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] border border-amber-200 border-4 rounded' />
+                        className='bg-white text-gray-400 w-[60%] rounded' />
                 </div>
-                <button onClick={()=>handleRegister(formData)} className='bg-amber-500 text-white mt-[8%] rounded p-1 w-[40%]'>Register</button>
+                <button onClick={()=>handleRegister(formData)} className='bg-black text-white mt-[8%] rounded p-1 w-[40%]'>Register</button>
             </div>
         </div>
     )

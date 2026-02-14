@@ -6,9 +6,9 @@ const Navbar = () => {
         const navigate = useNavigate();
  
     return (
-        <div className='bg-black h-[8%]  text-amber-500 flex justify-between'>
+        <div className='bg-black h-[8%]  text-white flex justify-between'>
             <p className='text-sm pl-10 flex justify-center items-center'>INTERESTING<br />BLOGS</p>
-            <nav className='text-amber-500 flex justify-between items-center pr-10 space-x-30 w-[60%]'>
+            <nav className='text-white flex justify-between items-center pr-10 space-x-30 w-[60%]'>
                 <ul className='flex space-x-10'>
                     <li onClick={()=>navigate("/")}>Home</li>
                     <li onClick={()=>navigate("/about")}>About</li>
@@ -17,9 +17,9 @@ const Navbar = () => {
                 </ul>
                 <span className='space-x-4 '>
                     <button onClick={()=>navigate("/signup")}
-                     className='bg-amber-500 text-white w-20 rounded-md'>Signup</button>
+                     className='bg-white text-black w-20 rounded-md'>Signup</button>
                     <button onClick={()=>navigate("/login")}
-                     className='bg-amber-500 text-white w-20 rounded-md'>Login</button>
+                     className='bg-white text-black w-20 rounded-md'>Login</button>
                 </span>
             </nav>
         </div>
