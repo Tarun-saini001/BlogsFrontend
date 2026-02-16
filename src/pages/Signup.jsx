@@ -31,7 +31,7 @@ const Signup = () => {
             if (response.ok) {
                 alert("User registered successfully!")
                 console.log("data", data);
-                login(data.token);
+                login(data.data.token);
                 setErrors({});
                 setFormData({
                     name: "",

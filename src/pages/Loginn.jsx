@@ -36,7 +36,7 @@ const Login = () => {
 
             console.log('data.token: ', data.data.token);
             if (response.ok && data.data.token) {
-                login(data.token);
+                login(data.data.token);
                 setErrors({});
                 setFormData({
                     email: "",

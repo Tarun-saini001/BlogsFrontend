@@ -7,7 +7,8 @@ import Home from './pages/home'
 import MyBlogs from './pages/MyBlogs'
 import Signup from './pages/Signup'
 import Login from './pages/Loginn'
-import VerifyOtp from './pages/VerifyOtp'
+import PublishBlog from './pages/PublishBolg'
+import BlogDetails from './pages/BlogDetails'
 
 
 function App() {
@@ -18,10 +19,11 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/allBlogs' element={<AllBlogs />} />
+        <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path='/myBlogs' element={<MyBlogs />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/verifyOtp' element={<VerifyOtp />} />
+        <Route path='/addBlog' element={<PublishBlog/>}/>
       </Routes>
     </div>
   )
