@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
-
+import React, { useContext, useState } from 'react'
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 const Signup = () => {
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
     const API = import.meta.env.VITE_API_URL;
     const [errors, setErrors] = useState({});
     const [formData, setFormData] = useState({
@@ -21,13 +24,22 @@ const Signup = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                 credentials: 'include'
             });
             const data = await response.json();
             if (response.ok) {
                 alert("User registered successfully!")
                 console.log("data", data);
+                login(data.token);
                 setErrors({});
+                setFormData({
+                    name: "",
+                    email: "",
+                    password: "",
+                });
+                window.location.href = "/";
+
             } else {
                 console.log('data:--- ', data);
                 if (data.errors) {
