@@ -24,6 +24,8 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
         <Route path='/addBlog' element={<PublishBlog/>}/>
+        <Route path="/edit-blog/:id" element={<PublishBlog />} />
+
       </Routes>
     </div>
   )

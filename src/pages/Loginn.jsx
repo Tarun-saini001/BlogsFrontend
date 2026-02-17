@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link} from 'react-router-dom';
 
 
 const Login = () => {
@@ -20,7 +20,30 @@ const Login = () => {
             [e.target.name]: e.target.value
         });
     };
+
+
+    const validate = () => {
+        const newErrors = {};
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        }
+
+        if (!formData.password.trim()) {
+            newErrors.password = "Password is required";
+        }
+
+        return newErrors;
+    };
+
+
     const handleLogin = async () => {
+
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
         try {
             const response = await fetch(`${API}/onBoarding/user/login`, {
                 method: "POST",
@@ -28,9 +51,9 @@ const Login = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData),
-                 credentials: 'include'
+                credentials: 'include'
             });
-            
+
             const data = await response.json();
             console.log("Login response:", data);
 
@@ -68,58 +91,75 @@ const Login = () => {
 
     return (
         <div className='h-screen flex justify-center items-center'>
-            <div className='bg-gray-200 w-[40%] h-auto pb-6 text-black rounded-3xl flex flex-col space-y-5 items-center'>
+            <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
+
                 <p className='text-4xl p-5'>Login</p>
 
-                <div className='flex space-x-2 w-[80%] justify-between'>
-                    <p className='bg-white w-[25%] text-black rounded p-1 text-center'>Email</p>
+                {/* email field */}
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">Email</label>
                     <input
-                        type="text"
+                        type="email"
                         name="email"
                         value={formData.email}
-                        placeholder='Enter Email'
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] rounded'
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-300 focus:ring-blue-500"
+                            }`}
                     />
+                    {errors.email && (
+                        <span className="text-red-500 text-xs">{errors.email}</span>
+                    )}
                 </div>
-                {errors.email && (
-                    <span className="text-red-500 text-sm ml-auto w-[60%]">
-                        {errors.email}
-                    </span>
-                )}
 
-                <div className='flex w-[80%] justify-between'>
-                    <p className='bg-white w-[25%] text-center text-black rounded p-1'>Password</p>
+                {/* password field */}
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">Password</label>
                     <input
                         type="password"
                         name="password"
                         value={formData.password}
-                        placeholder='Enter Password'
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] rounded'
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-300 focus:ring-blue-500"
+                            }`}
                     />
+                    {errors.password && (
+                        <span className="text-red-500 text-xs">{errors.password}</span>
+                    )}
                 </div>
-                {errors.password && (
-                    <span className="text-red-500 text-sm ml-auto w-[60%]">
-                        {errors.password}
-                    </span>
-                )}
 
                 {errors.general && (
-                    <span className="text-red-600 text-sm">
+                    <span className="text-red-600 text-sm text-center">
                         {errors.general}
                     </span>
                 )}
 
                 <button
                     onClick={handleLogin}
-                    className='bg-black text-white mt-[8%] rounded p-1 w-[40%]'
+                    className='bg-black text-white rounded p-2 w-[80%]'
                 >
                     Login
                 </button>
+
+                <div className="w-[80%] text-center text-sm">
+                    <span className="text-gray-600">
+                        Don't have an account?{" "}
+                    </span>
+                    <Link
+                        to="/signup"
+                        className="text-blue-600 font-medium hover:underline"
+                    >
+                        Register
+                    </Link>
+                </div>
+
             </div>
         </div>
-    )
+    );
+
 }
 
 export default Login;

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 const Signup = () => {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
@@ -17,7 +17,31 @@ const Signup = () => {
             [e.target.name]: e.target.value
         });
     }
+
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.name.trim()) {
+            newErrors.name = "Name is required";
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        }
+
+        if (!formData.password.trim()) {
+            newErrors.password = "Password is required";
+        }
+
+        return newErrors;
+    };
+
     const handleRegister = async () => {
+        
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
         try {
             const response = await fetch(`${API}/onBoarding/user/register`, {
                 method: "POST",
@@ -25,7 +49,7 @@ const Signup = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(formData),
-                 credentials: 'include'
+                credentials: 'include'
             });
             const data = await response.json();
             if (response.ok) {
@@ -43,7 +67,7 @@ const Signup = () => {
             } else {
                 console.log('data:--- ', data);
                 if (data.errors) {
-                    const formattedErrors = {};
+                    
                     data.errors.forEach(err => {
                         formattedErrors[err.field] = err.message;
                     });
@@ -61,53 +85,78 @@ const Signup = () => {
     };
     return (
         <div className=' h-screen flex justify-center items-center'>
-            <div className='bg-gray-200  w-[40%] h-auto text-black  rounded-3xl pb-6 flex flex-col space-y-5 items-center'>
-                <p className='text-4xl p-5'>Signup</p>
-                <div className='flex space-x-2   w-[80%] justify-between '>
-                    <p className='bg-white  w-[25%] text-black rounded p-1 text-center'>Name</p>
+           <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
+
+                <p className='text-4xl p-5'>Register</p>
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">Name</label>
                     <input
                         type="text"
                         name="name"
-                        placeholder="userName"
+                        value={formData.name}
                         onChange={handleChange}
-                        className='bg-white text-gray-500 w-[60%]   rounded' />
-
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
+                            }`}
+                    />
+                    {errors.name && (
+                        <span className="text-red-500 text-xs">{errors.name}</span>
+                    )}
                 </div>
-                {errors.name && (
-                    <span className="text-red-500 text-sm  ml-auto w-[60%]">
-                        {errors.name}
-                    </span>
-                )}
 
-                <div className='flex space-x-2   w-[80%] justify-between '>
-                    <p className='bg-white  w-[25%] text-black rounded p-1 text-center'>Email</p>
-                    <input type="text"
+
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">Email</label>
+                    <input
+                        type="email"
                         name="email"
-                        placeholder='Enter Email'
+                        value={formData.email}
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] rounded' />
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
+                            }`}
+                    />
+                    {errors.email && (
+                        <span className="text-red-500 text-xs">{errors.email}</span>
+                    )}
                 </div>
-                {errors.email && (
-                    <span className="text-red-500 text-sm  ml-auto w-[60%]">
-                        {errors.email}
-                    </span>
-                )}
 
-                <div className='flex space-x-  w-[80%] justify-between'>
-                    <p className='bg-white w-[25%] text-center text-black rounded p-1'>Password</p>
-                    <input type="text"
+
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">Password</label>
+                    <input
+                        type="password"
                         name="password"
-                        placeholder='Enter Password'
+                        value={formData.password}
                         onChange={handleChange}
-                        className='bg-white text-gray-400 w-[60%] rounded' />
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
+                            }`}
+                    />
+                    {errors.password && (
+                        <span className="text-red-500 text-xs">{errors.password}</span>
+                    )}
                 </div>
-                {errors.password && (
-                    <span className="text-red-500 text-sm  ml-auto w-[60%]">
-                        {errors.password}
-                    </span>
-                )}
+
+
 
                 <button onClick={() => handleRegister(formData)} className='bg-black text-white mt-[8%] rounded p-1 w-[40%]'>Register</button>
+
+                <div className="w-[80%] text-center  text-sm">
+                    <span className="text-gray-600 ">
+                        Already have an account?{" "}
+                    </span>
+                    <Link
+                        to="/login"
+                        className="text-blue-600  font-medium hover:underline"
+                    >
+                        Login
+                    </Link>
+                </div>
+
             </div>
         </div>
     )

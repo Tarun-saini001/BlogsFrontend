@@ -50,7 +50,7 @@ const Navbar = () => {
                                 onClick={() => navigate("/signup")}
                                 className='bg-white text-black w-20 rounded-md'
                             >
-                                Signup
+                                Register
                             </button>
                             <button
                                 onClick={() => navigate("/login")}

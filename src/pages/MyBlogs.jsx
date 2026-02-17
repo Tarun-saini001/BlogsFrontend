@@ -101,8 +101,15 @@ const MyBlogs = () => {
                     </button>
 
                     <button
+                      onClick={() => navigate(`/edit-blog/:id`)}
+                      className="text-green-300 w-10 rounded font-semibold"
+                    >
+                      Edit
+                    </button>
+
+                    <button
                       onClick={() => handleDelete(blog._id)}
-                      className="text-red-600  font-semibold"
+                      className="text-red-300 rounded  font-semibold"
                     >
                       Delete
                     </button>
