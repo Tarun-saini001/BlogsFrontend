@@ -9,13 +9,20 @@ const Signup = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        confirmPassword: ""
     })
     const handleChange = async (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
     }
 
     const validate = () => {
@@ -30,6 +37,18 @@ const Signup = () => {
 
         if (!formData.password.trim()) {
             newErrors.password = "Password is required";
+        }
+
+        if (!formData.confirmPassword.trim()) {
+            newErrors.confirmPassword = "Confirm password is required";
+        }
+
+        if (
+            formData.password &&
+            formData.confirmPassword &&
+            formData.password !== formData.confirmPassword
+        ) {
+            newErrors.confirmPassword = "Passwords do not match";
         }
 
         return newErrors;
@@ -67,7 +86,7 @@ const Signup = () => {
             } else {
                 console.log('data:--- ', data);
                 if (data.errors) {
-                   const formattedErrors ={}
+                    const formattedErrors = {}
                     data.errors.forEach(err => {
                         formattedErrors[err.field] = err.message;
                     });
@@ -84,10 +103,11 @@ const Signup = () => {
         }
     };
     return (
-        <div className=' h-screen flex justify-center items-center'>
-            <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
+        <div className='min-h-screen flex justify-center items-center px-4'>
+            <div className='w-full max-w-md text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
 
-                <p className='text-4xl p-5'>Register</p>
+
+                <p className='text-4xl '>Register</p>
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label className="text-sm font-medium text-left">Name</label>
                     <input
@@ -144,9 +164,30 @@ const Signup = () => {
                     )}
                 </div>
 
+                <div className="w-[80%] flex flex-col space-y-1">
+                    <label className="text-sm font-medium text-left">
+                        Confirm Password
+                    </label>
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm Password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.confirmPassword
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
+                            }`}
+                    />
+                    {errors.confirmPassword && (
+                        <span className="text-red-500 text-xs">
+                            {errors.confirmPassword}
+                        </span>
+                    )}
+                </div>
 
 
-                <button onClick={() => handleRegister(formData)} className='bg-black text-white mt-[8%] rounded p-1 w-[40%]'>Register</button>
+                <button onClick={() => handleRegister(formData)} className='bg-black text-white mt-[8%] cursor-pointer rounded p-1 w-[40%]'>Register</button>
 
                 <div className="w-[80%] text-center  text-sm">
                     <span className="text-gray-600 ">
@@ -154,7 +195,7 @@ const Signup = () => {
                     </span>
                     <Link
                         to="/login"
-                        className="text-blue-600  font-medium hover:underline"
+                        className="text-blue-600 cursor-pointer  font-medium"
                     >
                         Login
                     </Link>

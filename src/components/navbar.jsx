@@ -20,12 +20,17 @@ const Navbar = () => {
             <nav className='flex justify-between items-center pr-10 w-[60%]'>
 
                 <ul className='flex space-x-10 items-center'>
-                    <li onClick={() => navigate("/")}>Home</li>
+                    <li onClick={() => navigate("/")}
+                    className="cursor-pointer">Home</li>
 
                     {isLoggedIn && (
                         <>
-                            <li onClick={() => navigate("/allBlogs")}>All Blogs</li>
-                            <li onClick={() => navigate("/myBlogs")}>Your Blogs</li>
+                            <li onClick={() => navigate("/allBlogs")}
+                                className="cursor-pointer"
+                            >All Blogs</li>
+                            <li onClick={() => navigate("/myBlogs")}
+                                className="cursor-pointer"
+                            >Your Blogs</li>
                         </>
                     )}
                 </ul>
@@ -42,7 +47,7 @@ const Navbar = () => {
                                     logout();
                                     navigate("/");
                                 }}
-                                className='bg-white text-black px-3 rounded-md'
+                                className='bg-white text-black px-3 cursor-pointer rounded-md'
                             >
                                 Logout
                             </button>
@@ -52,13 +57,13 @@ const Navbar = () => {
                         <>
                             <button
                                 onClick={() => navigate("/signup")}
-                                className='bg-white text-black w-20 rounded-md'
+                                className='bg-white text-black w-20  cursor-pointer rounded-md'
                             >
                                 Register
                             </button>
                             <button
                                 onClick={() => navigate("/login")}
-                                className='bg-white text-black w-20 rounded-md'
+                                className='bg-white text-black cursor-pointer w-20 rounded-md'
                             >
                                 Login
                             </button>

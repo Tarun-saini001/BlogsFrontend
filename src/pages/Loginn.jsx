@@ -21,6 +21,11 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
     };
 
 
@@ -137,7 +142,7 @@ const Login = () => {
 
                 <button
                     onClick={handleLogin}
-                    className='bg-black text-white rounded p-2 w-[80%]'
+                    className='bg-black text-white cursor-pointer rounded p-2 w-[80%]'
                 >
                     Login
                 </button>
@@ -148,7 +153,7 @@ const Login = () => {
                     </span>
                     <Link
                         to="/signup"
-                        className="text-blue-600 font-medium hover:underline"
+                        className="text-blue-600 cursor-pointer font-medium"
                     >
                         Register
                     </Link>

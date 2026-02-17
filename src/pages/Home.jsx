@@ -73,7 +73,7 @@ const Home = () => {
 
                 <button
                   onClick={() => navigate(`/blog/${blog._id}`)}
-                  className="text-blue-600 font-semibold"
+                  className="text-blue-600 cursor-pointer font-semibold"
                 >
                   Read More →
                 </button>
