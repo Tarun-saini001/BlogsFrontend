@@ -12,42 +12,49 @@ const Signup = () => {
         password: "",
         confirmPassword: ""
     })
-    const handleChange = async (e) => {
-        setFormData({
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        const updatedForm = {
             ...formData,
-            [e.target.name]: e.target.value
-        });
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
+            [name]: value
+        };
 
-    }
+        setFormData(updatedForm);
+        setErrors(validate(updatedForm));
+    };
 
-    const validate = () => {
+
+    const validate = (data) => {
         const newErrors = {};
-        if (!formData.name.trim()) {
+
+        // name validation
+        if (!data.name.trim()) {
             newErrors.name = "Name is required";
+        } else if (data.name.trim().length < 3) {
+            newErrors.name = "Name must be at least 3 characters";
         }
 
-        if (!formData.email.trim()) {
+        // email validation
+        if (!data.email.trim()) {
             newErrors.email = "Email is required";
-        }
-
-        if (!formData.password.trim()) {
-            newErrors.password = "Password is required";
-        }
-
-        if (!formData.confirmPassword.trim()) {
-            newErrors.confirmPassword = "Confirm password is required";
-        }
-
-        if (
-            formData.password &&
-            formData.confirmPassword &&
-            formData.password !== formData.confirmPassword
+        } else if (
+            !/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.com$/.test(data.email)
         ) {
+            newErrors.email = "Invalid email format";
+        }
+
+
+        // password validation
+        if (!data.password.trim()) {
+            newErrors.password = "Password is required";
+        } else if (data.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
+        }
+
+        if (!data.confirmPassword.trim()) {
+            newErrors.confirmPassword = "Confirm password is required";
+        } else if (data.password !== data.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match";
         }
 
@@ -56,7 +63,7 @@ const Signup = () => {
 
     const handleRegister = async () => {
 
-        const validationErrors = validate();
+        const validationErrors = validate(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
@@ -67,21 +74,27 @@ const Signup = () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password,
+                }),
                 credentials: 'include'
             });
             const data = await response.json();
             if (response.ok) {
-                alert("User registered successfully!")
-                console.log("data", data);
-                login(data.data.token);
-                setErrors({});
-                setFormData({
-                    name: "",
-                    email: "",
-                    password: "",
-                });
-                window.location.href = "/";
+                if (response.ok) {
+
+                    console.log("data", data);
+
+                    if (data?.data?.token) {
+                        login(data.data.token);
+                        alert("Login successful!");
+                        navigate("/");
+                    } else {
+                        alert(data.message || "Operation completed");
+                    }
+                }
 
             } else {
                 console.log('data:--- ', data);
@@ -187,7 +200,17 @@ const Signup = () => {
                 </div>
 
 
-                <button onClick={() => handleRegister(formData)} className='bg-black text-white mt-[8%] cursor-pointer rounded p-1 w-[40%]'>Register</button>
+                <button
+                    disabled={Object.keys(errors).length > 0}
+                    onClick={handleRegister}
+                    className={`mt-[8%] rounded p-1 w-[40%] ${Object.keys(errors).length > 0
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-black text-white cursor-pointer"
+                        }`}
+                >
+                    Register
+                </button>
+
 
                 <div className="w-[80%] text-center  text-sm">
                     <span className="text-gray-600 ">

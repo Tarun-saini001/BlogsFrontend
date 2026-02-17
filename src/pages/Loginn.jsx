@@ -1,9 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
-
-
 
 const Login = () => {
     const { login } = useContext(AuthContext);
@@ -17,54 +15,51 @@ const Login = () => {
     });
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-        const validationErrors = validate();
-        if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors);
-            return;
-        }
+        const { name, value } = e.target;
+        const updatedForm = { ...formData, [name]: value };
+        setFormData(updatedForm);
+
+        setErrors(validate(updatedForm));
     };
 
 
-    const validate = () => {
+    const validate = (data) => {
         const newErrors = {};
 
-        if (!formData.email.trim()) {
+        // email validation
+        if (!data.email.trim()) {
             newErrors.email = "Email is required";
+        } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/.test(data.email)) {
+            newErrors.email = "Invalid email format";
         }
 
-        if (!formData.password.trim()) {
+        // password validation
+        if (!data.password.trim()) {
             newErrors.password = "Password is required";
+        } else if (data.password.length < 6) {
+            newErrors.password = "Password must be at least 6 characters";
         }
 
         return newErrors;
     };
 
-
     const handleLogin = async () => {
-
-        const validationErrors = validate();
+        const validationErrors = validate(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
+
         try {
             const response = await fetch(`${API}/onBoarding/user/login`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
                 credentials: 'include'
             });
 
             const data = await response.json();
             console.log("Login response:", data);
-
-            console.log('data.token: ', data.data?.token);
 
             if (data.errors) {
                 const formattedErrors = {};
@@ -74,7 +69,6 @@ const Login = () => {
                 setErrors(formattedErrors);
 
             } else if (data.data?.token) {
-
                 login(data.data.token);
                 setErrors({});
                 setFormData({ email: "", password: "" });
@@ -85,18 +79,18 @@ const Login = () => {
             }
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
             setErrors({ general: "Something went wrong" });
         }
     };
 
     return (
-        <div className='h-screen flex justify-center items-center'>
-            <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
+        <div className='min-h-screen flex justify-center items-center px-4'>
+            <div className='w-full max-w-md text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
 
-                <p className='text-4xl p-5'>Login</p>
+                <p className='text-4xl'>Login</p>
 
-                {/* email field */}
+
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label className="text-sm font-medium text-left">Email</label>
                     <input
@@ -110,12 +104,10 @@ const Login = () => {
                             : "border-gray-300 focus:ring-blue-500"
                             }`}
                     />
-                    {errors.email && (
-                        <span className="text-red-500 text-xs">{errors.email}</span>
-                    )}
+                    {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
 
-                {/* password field */}
+
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label className="text-sm font-medium text-left">Password</label>
                     <input
@@ -129,28 +121,29 @@ const Login = () => {
                             : "border-gray-300 focus:ring-blue-500"
                             }`}
                     />
-                    {errors.password && (
-                        <span className="text-red-500 text-xs">{errors.password}</span>
-                    )}
+                    {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                 </div>
 
+
                 {errors.general && (
-                    <span className="text-red-600 text-sm text-center">
-                        {errors.general}
-                    </span>
+                    <span className="text-red-600 text-sm text-center">{errors.general}</span>
                 )}
+
 
                 <button
                     onClick={handleLogin}
-                    className='bg-black text-white cursor-pointer rounded p-2 w-[80%]'
+                    disabled={Object.keys(errors).length > 0}
+                    className={`mt-4 rounded p-2 w-[40%] ${Object.keys(errors).length > 0
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-black text-white cursor-pointer"
+                        }`}
                 >
                     Login
                 </button>
 
+
                 <div className="w-[80%] text-center text-sm">
-                    <span className="text-gray-600">
-                        Don't have an account?{" "}
-                    </span>
+                    <span className="text-gray-600">Don't have an account? </span>
                     <Link
                         to="/signup"
                         className="text-blue-600 cursor-pointer font-medium"
@@ -162,7 +155,6 @@ const Login = () => {
             </div>
         </div>
     );
-
 }
 
 export default Login;
