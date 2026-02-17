@@ -100,7 +100,7 @@ const PublishBlog = () => {
                     )}
                 </div>
 
-                {/* Title */}
+                {/* title */}
                 <div className="space-y-2">
                     <label className="font-semibold text-lg">Title</label>
                     <input
@@ -112,7 +112,7 @@ const PublishBlog = () => {
                     />
                 </div>
 
-                {/* Content */}
+                {/* content */}
                 <div className="space-y-2">
                     <label className="font-semibold text-lg">Content</label>
                     <textarea

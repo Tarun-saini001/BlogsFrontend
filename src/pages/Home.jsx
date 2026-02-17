@@ -10,8 +10,13 @@ const Home = () => {
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    if (isLoggedIn) {
+      fetchBlogs();
+    } else {
+      setBlogs([]);
+    }
+  }, [isLoggedIn]);
+
 
   const fetchBlogs = async () => {
     try {
@@ -40,7 +45,7 @@ const Home = () => {
         {isLoggedIn && <WriteBlog />}
       </div>
       {/* Latest Blogs Section */}
-      <div className="max-w-6xl mx-auto py-10 px-4">
+     { isLoggedIn&& (<div className="max-w-6xl mx-auto py-10 px-4">
         <h2 className="text-2xl font-bold mb-6">Latest Blogs</h2>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -76,7 +81,7 @@ const Home = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> )}
     </div>
   )
 }

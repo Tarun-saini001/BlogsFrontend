@@ -38,11 +38,15 @@ const Navbar = () => {
                                 onClick={() => navigate("/profile")}
                             />
                             <button
-                                onClick={logout}
+                                onClick={() => {
+                                    logout();
+                                    navigate("/");
+                                }}
                                 className='bg-white text-black px-3 rounded-md'
                             >
                                 Logout
                             </button>
+
                         </>
                     ) : (
                         <>
