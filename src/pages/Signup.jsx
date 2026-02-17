@@ -36,7 +36,7 @@ const Signup = () => {
     };
 
     const handleRegister = async () => {
-        
+
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -67,7 +67,7 @@ const Signup = () => {
             } else {
                 console.log('data:--- ', data);
                 if (data.errors) {
-                    
+                   const formattedErrors ={}
                     data.errors.forEach(err => {
                         formattedErrors[err.field] = err.message;
                     });
@@ -85,7 +85,7 @@ const Signup = () => {
     };
     return (
         <div className=' h-screen flex justify-center items-center'>
-           <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
+            <div className='w-[35%] h-auto text-black shadow-2xl rounded-3xl py-8 flex flex-col items-center gap-5'>
 
                 <p className='text-4xl p-5'>Register</p>
                 <div className="w-[80%] flex flex-col space-y-1">
@@ -93,6 +93,7 @@ const Signup = () => {
                     <input
                         type="text"
                         name="name"
+                        placeholder='Enter Name'
                         value={formData.name}
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name
@@ -111,6 +112,7 @@ const Signup = () => {
                     <input
                         type="email"
                         name="email"
+                        placeholder='Enter Email'
                         value={formData.email}
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
@@ -129,6 +131,7 @@ const Signup = () => {
                     <input
                         type="password"
                         name="password"
+                        placeholder='Enter Password'
                         value={formData.password}
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password

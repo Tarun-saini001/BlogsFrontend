@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate , Link} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { toast } from "react-toastify";
+
 
 
 const Login = () => {
@@ -57,32 +59,26 @@ const Login = () => {
             const data = await response.json();
             console.log("Login response:", data);
 
-            console.log('data.token: ', data.data.token);
-            if (response.ok && data.data.token) {
+            console.log('data.token: ', data.data?.token);
+
+            if (data.errors) {
+                const formattedErrors = {};
+                data.errors.forEach(err => {
+                    formattedErrors[err.field] = err.message;
+                });
+                setErrors(formattedErrors);
+
+            } else if (data.data?.token) {
+
                 login(data.data.token);
                 setErrors({});
-                setFormData({
-                    email: "",
-                    password: ""
-                });
-
-                console.log("Before navigate");
+                setFormData({ email: "", password: "" });
                 navigate("/");
-                console.log("After navigate");
 
             } else {
-                if (data.errors) {
-                    const formattedErrors = {};
-                    data.errors.forEach(err => {
-                        formattedErrors[err.field] = err.message;
-                    });
-                    setErrors(formattedErrors);
-                } else {
-                    // alert(data.message || "login failed");
-                    console.log("errorrrrr")
-
-                }
+                toast.error(data.message || "Invalid email or password");
             }
+
         } catch (error) {
             console.log(error);
             setErrors({ general: "Something went wrong" });
@@ -101,11 +97,12 @@ const Login = () => {
                     <input
                         type="email"
                         name="email"
+                        placeholder='Enter Email'
                         value={formData.email}
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
-                                ? "border-red-500 focus:ring-red-200"
-                                : "border-gray-300 focus:ring-blue-500"
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
                             }`}
                     />
                     {errors.email && (
@@ -119,11 +116,12 @@ const Login = () => {
                     <input
                         type="password"
                         name="password"
+                        placeholder='Enter Password'
                         value={formData.password}
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
-                                ? "border-red-500 focus:ring-red-200"
-                                : "border-gray-300 focus:ring-blue-500"
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-300 focus:ring-blue-500"
                             }`}
                     />
                     {errors.password && (
