@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
 
-    const { isLoggedIn, logout } = useContext(AuthContext);
+    const { isLoggedIn, logout ,user} = useContext(AuthContext);
     const navigate = useNavigate();
 
     return (
@@ -21,7 +21,7 @@ const Navbar = () => {
 
                 <ul className='flex space-x-10 items-center'>
                     <li onClick={() => navigate("/")}
-                    className="cursor-pointer">Home</li>
+                        className="cursor-pointer">Home</li>
 
                     {isLoggedIn && (
                         <>
@@ -37,38 +37,35 @@ const Navbar = () => {
 
                 <span className='flex items-center space-x-4'>
                     {isLoggedIn ? (
-                        <>
-                            <FaUserCircle
-                                size={28}
+                        user?.profilePic ? (
+                            <img
+                                src={`${API}${user.profilePic}`}
+                                alt="profile"
+                                className="w-8 h-8 rounded-full cursor-pointer"
                                 onClick={() => navigate("/profile")}
                             />
-                            <button
-                                onClick={() => {
-                                    logout();
-                                    navigate("/");
-                                }}
-                                className='bg-white text-black px-3 cursor-pointer rounded-md'
-                            >
-                                Logout
-                            </button>
-
-                        </>
-                    ) : (
+                        ) : (
+                            <FaUserCircle
+                                className="w-8 h-8 cursor-pointer text-gray-600"
+                                onClick={() => navigate("/profile")}
+                            />
+                        )) : (
                         <>
                             <button
                                 onClick={() => navigate("/signup")}
-                                className='bg-white text-black w-20  cursor-pointer rounded-md'
+                                className="bg-white text-black w-20 rounded-md"
                             >
                                 Register
                             </button>
                             <button
                                 onClick={() => navigate("/login")}
-                                className='bg-white text-black cursor-pointer w-20 rounded-md'
+                                className="bg-white text-black w-20 rounded-md"
                             >
                                 Login
                             </button>
                         </>
                     )}
+
                 </span>
             </nav>
         </div>

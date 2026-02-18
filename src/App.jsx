@@ -10,6 +10,7 @@ import Login from './pages/Loginn'
 import PublishBlog from './pages/PublishBolg'
 import BlogDetails from './pages/BlogDetails'
 import VerifyOtp from './pages/VerifyOtp'
+import Profile from './pages/Profile'
 
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path='/addBlog' element={<PublishBlog />} />
         <Route path="/edit-blog/:id" element={<PublishBlog />} />
         <Route path='/verify-otp' element={<VerifyOtp />} />
+        <Route path='/profile' element={<Profile />} />
 
       </Routes>
     </div>

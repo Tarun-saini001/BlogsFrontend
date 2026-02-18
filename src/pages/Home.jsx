@@ -75,7 +75,8 @@ const Home = () => {
                   onClick={() => navigate(`/blog/${blog._id}`)}
                   className="text-blue-600 cursor-pointer font-semibold"
                 >
-                  Read More →
+                  {/* Read More → */}
+                  ...Read More
                 </button>
               </div>
             </div>

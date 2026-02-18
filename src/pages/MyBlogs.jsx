@@ -97,7 +97,7 @@ const MyBlogs = () => {
                       onClick={() => navigate(`/blog/${blog._id}`)}
                       className="text-blue-600 font-semibold"
                     >
-                      Read More →
+                      ...Read More 
                     </button>
 
                     <button
