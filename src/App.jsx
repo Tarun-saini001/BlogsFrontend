@@ -9,6 +9,8 @@ import Signup from './pages/Signup'
 import Login from './pages/Loginn'
 import PublishBlog from './pages/PublishBolg'
 import BlogDetails from './pages/BlogDetails'
+import VerifyOtp from './pages/VerifyOtp'
+
 
 
 function App() {
@@ -23,8 +25,9 @@ function App() {
         <Route path='/myBlogs' element={<MyBlogs />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/addBlog' element={<PublishBlog/>}/>
+        <Route path='/addBlog' element={<PublishBlog />} />
         <Route path="/edit-blog/:id" element={<PublishBlog />} />
+        <Route path='/verify-otp' element={<VerifyOtp />} />
 
       </Routes>
     </div>
