@@ -23,8 +23,8 @@ const VerifyOtp = () => {
 
     // Timer logic
     useEffect(() => {
-        const interval = setInterval(() => {
-            const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
+        const interval = setInterval(() => { // runs after 1000 ms
+            const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));  
             setTimeLeft(remaining);
 
             if (remaining <= 0) {

@@ -16,9 +16,20 @@ const Login = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const updatedForm = { ...formData, [name]: value };
-        setFormData(updatedForm);
+        let cleanedValue = value;
+        if (name === "email") {
+            cleanedValue = value.trimStart();
+        }
 
+        if (name === "password") {
+            cleanedValue = value.trimStart();
+        }
+        const updatedForm = {
+            ...formData,
+            [name]: cleanedValue
+        };
+
+        setFormData(updatedForm);
         setErrors(validate(updatedForm));
     };
 
@@ -26,22 +37,24 @@ const Login = () => {
     const validate = (data) => {
         const newErrors = {};
 
-        // email validation
+        // Email validation
         if (!data.email.trim()) {
             newErrors.email = "Email is required";
-        } else if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/.test(data.email)) {
-            newErrors.email = "Invalid email format";
+        } else if (
+            !/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(data.email)
+        ) {
+            newErrors.email =
+                "Email must be like example@domain.com (domain only letters)";
         }
 
-        // password validation
+        // Password validation
         if (!data.password.trim()) {
             newErrors.password = "Password is required";
-        } else if (data.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
         }
 
         return newErrors;
     };
+
 
     const handleLogin = async () => {
         const validationErrors = validate(formData);
@@ -132,11 +145,7 @@ const Login = () => {
 
                 <button
                     onClick={handleLogin}
-                    disabled={Object.keys(errors).length > 0}
-                    className={`mt-4 rounded p-2 w-[40%] ${Object.keys(errors).length > 0
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-black text-white cursor-pointer"
-                        }`}
+                    className={`mt-4 rounded p-2 w-[40%] bg-black cursor-pointer text-white ho`}
                 >
                     Login
                 </button>

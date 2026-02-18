@@ -31,7 +31,7 @@ const Signup = () => {
             case "email":
                 if (!value.trim()) {
                     error = "Email is required";
-                } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/.test(value)) {
+                } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(value)) {
                     error = "Invalid email format";
                 }
                 break;
@@ -41,8 +41,13 @@ const Signup = () => {
                     error = "Password is required";
                 } else if (value.length < 6) {
                     error = "Password must be at least 6 characters";
+                } else if (!/[0-9]/.test(value)) {
+                    error = "Password must contain at least one number";
+                } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+                    error = "Password must contain at least one special character";
                 }
                 break;
+
 
             case "confirmPassword":
                 if (!value.trim()) {
@@ -51,6 +56,7 @@ const Signup = () => {
                     error = "Passwords do not match";
                 }
                 break;
+
 
             default:
                 break;
@@ -75,20 +81,37 @@ const Signup = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        let cleanedValue = value;
+
+        // Prevent leading spaces
+        if (name === "name") {
+            cleanedValue = value.replace(/^\s+/, ""); // remove leading spaces
+            cleanedValue = cleanedValue.replace(/\s{2,}/g, " "); // no double spaces
+        }
+
+        if (name === "email") {
+            cleanedValue = value.trimStart(); // no space at beginning
+        }
+
+        if (name === "password" || name === "confirmPassword") {
+            cleanedValue = value.trimStart(); // no leading spaces
+        }
+
         const updatedForm = {
             ...formData,
-            [name]: value
+            [name]: cleanedValue
         };
 
         setFormData(updatedForm);
 
-        const fieldError = validateField(name, value);
+        const fieldError = validateField(name, cleanedValue);
 
         setErrors((prev) => ({
             ...prev,
             [name]: fieldError
         }));
     };
+
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
