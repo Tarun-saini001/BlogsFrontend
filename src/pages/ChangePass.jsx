@@ -80,19 +80,27 @@ const ChangePass = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         const cleanedValue = value.trimStart();
-        const updatedForm = {
-            ...formData,
-            [name]: cleanedValue
-        };
 
-        setFormData(updatedForm);
-        const fieldError = validateField(name, cleanedValue);
+        setFormData((prev) => ({
+            ...prev,
+            [name]: cleanedValue
+        }));
+        
+
+    };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+
+        const fieldError = validateField(name, value);
 
         setErrors((prev) => ({
             ...prev,
             [name]: fieldError
         }));
     };
+
+
 
 
     const handleSubmit = async () => {
@@ -113,7 +121,7 @@ const ChangePass = () => {
                     Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    currentPassword: formData.currentPassword,
+                    oldPassword: formData.currentPassword,
                     newPassword: formData.newPassword
                 })
             });
@@ -122,10 +130,17 @@ const ChangePass = () => {
             console.log('data:(change pass) ', data);
 
             if (response.ok) {
-               toast.success("Password changed successfully");
+                toast.success("Password changed successfully");
                 navigate("/profile");
             } else {
-                toast.error(data.message || "Failed to change password");
+                if (data.message.includes("Old password")) {
+                    setErrors((prev) => ({
+                        ...prev,
+                        currentPassword: "Current password is incorrect"
+                    }));
+                } else {
+                    toast.error(data.message || "Failed to change password");
+                }
             }
 
         } catch (error) {
@@ -147,6 +162,7 @@ const ChangePass = () => {
                     <input
                         type="password"
                         name="currentPassword"
+                        onBlur={handleBlur}
                         placeholder="Enter current password"
                         value={formData.currentPassword}
                         onChange={handleChange}
@@ -170,6 +186,7 @@ const ChangePass = () => {
                     <input
                         type="password"
                         name="newPassword"
+                        onBlur={handleBlur}
                         placeholder="Enter new password"
                         value={formData.newPassword}
                         onChange={handleChange}
@@ -193,6 +210,7 @@ const ChangePass = () => {
                     <input
                         type="password"
                         name="confirmPassword"
+                        onBlur={handleBlur}
                         placeholder="Confirm new password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
