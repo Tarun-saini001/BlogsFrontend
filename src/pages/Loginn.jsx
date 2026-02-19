@@ -105,7 +105,7 @@ const Login = () => {
 
 
                 <div className="w-[80%] flex flex-col space-y-1">
-                    <label className="text-sm font-medium text-left">Email</label>
+                    <label className="text-sm font-medium text-left">Email <span className="text-red-500">*</span></label>
                     <input
                         type="email"
                         name="email"
@@ -114,7 +114,7 @@ const Login = () => {
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
                             ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-300 focus:ring-blue-500"
+                            : "border-gray-500 focus:ring-blue-500"
                             }`}
                     />
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
@@ -122,7 +122,7 @@ const Login = () => {
 
 
                 <div className="w-[80%] flex flex-col space-y-1">
-                    <label className="text-sm font-medium text-left">Password</label>
+                    <label className="text-sm font-medium text-left">Password <span className="text-red-500">*</span></label>
                     <input
                         type="password"
                         name="password"
@@ -131,7 +131,7 @@ const Login = () => {
                         onChange={handleChange}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
                             ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-300 focus:ring-blue-500"
+                            : "border-gray-500 focus:ring-blue-500"
                             }`}
                     />
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}

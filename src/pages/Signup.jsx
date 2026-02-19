@@ -23,18 +23,40 @@ const Signup = () => {
             case "name":
                 if (!value.trim()) {
                     error = "Name is required";
-                } else if (value.trim().length < 3) {
-                    error = "Name must be at least 3 characters";
+                }
+                else if (!/^[a-zA-Z]+$/.test(value)) {
+                    error = "Name must contain only alphabets (no numbers or special characters)";
+                }
+                else if (!/^[A-Z]/.test(value)) {
+                    error = "First letter must be capital";
+                }
+                else if (value.length < 3) {
+                    error = "Name must be at least 3 characters long";
+                }
+                else if (value.length > 15) {
+                    error = "Name must not exceed 15 characters";
                 }
                 break;
 
-            case "email":
+
+            case "password":
                 if (!value.trim()) {
-                    error = "Email is required";
-                } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(value)) {
-                    error = "Invalid email format";
+                    error = "Password is required";
+                }
+                else if (value.length < 6) {
+                    error = "Password must be at least 6 characters long";
+                }
+                else if (!/[A-Za-z]/.test(value)) {
+                    error = "Password must contain at least one alphabet";
+                }
+                else if (!/[0-9]/.test(value)) {
+                    error = "Password must contain at least one number";
+                }
+                else if (!/[!@#$%^&*]/.test(value)) {
+                    error = "Password must contain at least one special character";
                 }
                 break;
+
 
             case "password":
                 if (!value.trim()) {
@@ -182,7 +204,10 @@ const Signup = () => {
                         onBlur={handleBlur}
                         value={formData.name}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded"
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-500 focus:ring-blue-500"
+                            }`}
                     />
                     {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
@@ -197,7 +222,10 @@ const Signup = () => {
                         onBlur={handleBlur}
                         value={formData.email}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded"
+                        className={`bg-white px-3 py-2 border rounded  focus:outline-none focus:ring-2 ${errors.email
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-500 focus:ring-blue-500"
+                            }`}
                     />
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
@@ -212,7 +240,10 @@ const Signup = () => {
                         onBlur={handleBlur}
                         value={formData.password}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded"
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-500 focus:ring-blue-500"
+                            }`}
                     />
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                 </div>
@@ -227,7 +258,10 @@ const Signup = () => {
                         onBlur={handleBlur}
                         value={formData.confirmPassword}
                         onChange={handleChange}
-                        className="border px-3 py-2 rounded"
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.confirmPassword
+                            ? "border-red-500 focus:ring-red-200"
+                            : "border-gray-500 focus:ring-blue-500"
+                            }`}
                     />
                     {errors.confirmPassword && (
                         <span className="text-red-500 text-xs">{errors.confirmPassword}</span>
