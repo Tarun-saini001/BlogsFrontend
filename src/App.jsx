@@ -11,6 +11,7 @@ import PublishBlog from './pages/PublishBolg'
 import BlogDetails from './pages/BlogDetails'
 import VerifyOtp from './pages/VerifyOtp'
 import Profile from './pages/Profile'
+import ChangePass from './pages/changePass'
 
 
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/edit-blog/:id" element={<PublishBlog />} />
         <Route path='/verify-otp' element={<VerifyOtp />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/change-password' element={<ChangePass />} />
 
       </Routes>
     </div>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import WriteBlog from "../components/WriteBlog";
 
 const Profile = () => {
-    const { logout } = useContext(AuthContext);
+    const { logout, updateProfilePic } = useContext(AuthContext);
     const navigate = useNavigate();
     const API = import.meta.env.VITE_API_URL;
 
@@ -45,6 +45,7 @@ const Profile = () => {
             });
 
             const data = await response.json();
+            console.log('data:(myblogs) ', data);
 
             if (response.ok) {
                 setUserBlogs(data.data);
@@ -76,6 +77,7 @@ const Profile = () => {
 
             if (response.ok) {
                 setProfileImage(data.data.profilePic);
+                updateProfilePic(data.data.profilePic)
             }
         } catch (error) {
             console.error(error);
@@ -134,12 +136,19 @@ const Profile = () => {
                     {userBlogs.length === 0 ? (
                         <p>No blogs yet.</p>
                     ) : (
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-6">
                             {userBlogs.map((blog) => (
                                 <div
                                     key={blog._id}
                                     className="border rounded-md p-4"
                                 >
+                                    {blog.img && (
+                                        <img
+                                            src={`${API}${blog.img}`}
+                                            alt={blog.title}
+                                            className="w-full h-48 object-cover rounded-md mb-3"
+                                        />
+                                    )}
                                     <h3 className="font-semibold">{blog.title}</h3>
                                     <p className="text-gray-600 line-clamp-2">
                                         {blog.content}

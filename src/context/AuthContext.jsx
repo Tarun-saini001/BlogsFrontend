@@ -9,15 +9,30 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const userData = JSON.parse(localStorage.getItem("user"));
+        const userString = localStorage.getItem("user");
+
+        let userData = null;
+
+        try {
+            if (userString && userString !== "undefined") {
+                userData = JSON.parse(userString);
+            }
+        } catch (error) {
+            console.error("Invalid user in localStorage:", error);
+            localStorage.removeItem("user");
+        }
+
         if (token && userData) {
             setIsLoggedIn(true);
+            setUser(userData);
         }
     }, []);
 
-    const login = (token) => {
+
+    const login = (token, userData) => {
         localStorage.setItem("token", token);
-        localStorage.setItem("user", user);
+        localStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData);
         setIsLoggedIn(true);
     };
 
@@ -29,12 +44,24 @@ const AuthProvider = ({ children }) => {
     };
 
     const updateProfilePic = (newPic) => {
-        setUser(prev => ({ ...prev, profilePic: newPic }));
-        localStorage.setItem("user", JSON.stringify({ ...user, profilePic: newPic }));
+        setUser(prev => {
+            const updatedUser = { ...prev, profilePic: newPic };
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+            return updatedUser;
+        });
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout, updateProfilePic  }}>
+        <AuthContext.Provider
+            value={{
+                isLoggedIn,
+                login,
+                logout,
+                user,
+                setUser,
+                updateProfilePic
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );

@@ -4,8 +4,9 @@ import { FaUserCircle } from "react-icons/fa";
 import { AuthContext } from '../context/AuthContext';
 
 const Navbar = () => {
+    const API = import.meta.env.VITE_API_URL;
 
-    const { isLoggedIn, logout ,user} = useContext(AuthContext);
+    const { isLoggedIn, logout, user } = useContext(AuthContext);
     const navigate = useNavigate();
 
     return (

@@ -82,7 +82,7 @@ const Login = () => {
                 setErrors(formattedErrors);
 
             } else if (data.data?.token) {
-                login(data.data.token);
+                login(data.data.token , data.data);
                 setErrors({});
                 setFormData({ email: "", password: "" });
                 navigate("/");
