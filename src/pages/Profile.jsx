@@ -25,7 +25,7 @@ const Profile = () => {
             const token = localStorage.getItem("token");
 
             const response = await fetch(`${API}/onBoarding/user/updateProfile`, {
-                method: "PUT",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -50,13 +50,14 @@ const Profile = () => {
     const fetchProfile = async () => {
         try {
             const token = localStorage.getItem("token");
+            console.log('token: ', token);
 
             const response = await fetch(`${API}/onBoarding/user/`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
             const data = await response.json();
-            console.log('data: ', data);
+            console.log('data:(profile) ', data);
             if (response.ok) {
                 setProfileImage(data.data.profilePic);
                 setUserName(data.data.name);
@@ -90,7 +91,11 @@ const Profile = () => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-
+        // check file type
+        if (!file.type.startsWith("image/")) {
+            toast.error("Only image files are allowed!");
+            return;
+        }
         const token = localStorage.getItem("token");
 
         const formData = new FormData();
@@ -110,10 +115,13 @@ const Profile = () => {
             if (response.ok) {
                 setProfileImage(data.data.profilePic);
                 updateProfilePic(data.data.profilePic)
+                toast.success("Profile pic updated successfully!")
+            } else {
+                toast.error(data.message || "Failed to upload image");
             }
         } catch (error) {
-            toast.success(error.message)
-            console.error(error);
+            console.error(err);
+            toast.error("Something went wrong while uploading the image");
         }
     };
 
