@@ -7,8 +7,6 @@ const Signup = () => {
     const { login } = useContext(AuthContext);
     const API = import.meta.env.VITE_API_URL;
 
-    const [errors, setErrors] = useState({});
-
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -16,69 +14,42 @@ const Signup = () => {
         confirmPassword: ""
     });
 
+    const [errors, setErrors] = useState({});
+
+    // Validate single field for onBlur
     const validateField = (name, value) => {
         let error = "";
 
         switch (name) {
             case "name":
-                if (!value.trim()) {
-                    error = "Name is required";
-                }
-                else if (!/^[a-zA-Z]+$/.test(value)) {
-                    error = "Name must contain only alphabets (no numbers or special characters)";
-                }
-                else if (!/^[A-Z]/.test(value)) {
-                    error = "First letter must be capital";
-                }
-                else if (value.length < 3) {
-                    error = "Name must be at least 3 characters long";
-                }
-                else if (value.length > 15) {
-                    error = "Name must not exceed 15 characters";
-                }
+                if (!value.trim()) error = "Name is required";
+                else if (!/^[A-Z][a-zA-Z\s]+$/.test(value))
+                    error = "Name must start with a capital letter ";
                 break;
 
+            case "email":
+                if (!value.trim()) error = "Email is required";
+                else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(value))
+                    error = "Invalid email address";
+                break;
 
             case "password":
                 if (!value.trim()) {
                     error = "Password is required";
-                }
-                else if (value.length < 6) {
-                    error = "Password must be at least 6 characters long";
-                }
-                else if (!/[A-Za-z]/.test(value)) {
-                    error = "Password must contain at least one alphabet";
-                }
-                else if (!/[0-9]/.test(value)) {
-                    error = "Password must contain at least one number";
-                }
-                else if (!/[!@#$%^&*]/.test(value)) {
-                    error = "Password must contain at least one special character";
+                } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).+$/.test(value)) {
+                    error = "Password must contain at least one alphabet, one number, and one special character";
                 }
                 break;
-
-
-            case "password":
-                if (!value.trim()) {
-                    error = "Password is required";
-                } else if (value.length < 6) {
-                    error = "Password must be at least 6 characters";
-                } else if (!/[0-9]/.test(value)) {
-                    error = "Password must contain at least one number";
-                } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-                    error = "Password must contain at least one special character";
-                }
-                break;
-
 
             case "confirmPassword":
                 if (!value.trim()) {
                     error = "Confirm password is required";
+                } else if (!formData.password) {
+                    error = "Please enter password first";
                 } else if (value !== formData.password) {
                     error = "Passwords do not match";
                 }
                 break;
-
 
             default:
                 break;
@@ -87,68 +58,60 @@ const Signup = () => {
         return error;
     };
 
-    const validate = (data) => {
+    // Validate entire form on submit
+    const validateForm = () => {
         const newErrors = {};
-
-        Object.keys(data).forEach((key) => {
-            const error = validateField(key, data[key]);
-            if (error) {
-                newErrors[key] = error;
-            }
+        Object.keys(formData).forEach((key) => {
+            const error = validateField(key, formData[key]);
+            if (error) newErrors[key] = error;
         });
-
         return newErrors;
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        let cleanedValue = value;
-
-        // Prevent leading spaces
+        let cleanedValue = value.trimStart();
         if (name === "name") {
-            cleanedValue = value.replace(/^\s+/, ""); // remove leading spaces
-            cleanedValue = cleanedValue.replace(/\s{2,}/g, " "); // no double spaces
+            cleanedValue = cleanedValue.replace(/\s{2,}/g, " ");
         }
 
-        if (name === "email") {
-            cleanedValue = value.trimStart(); // no space at beginning
-        }
+        setFormData((prev) => {
+            const updatedData = {
+                ...prev,
+                [name]: cleanedValue
+            };
 
-        if (name === "password" || name === "confirmPassword") {
-            cleanedValue = value.trimStart(); // no leading spaces
-        }
+            // validate current field
+            const fieldError = validateField(name, cleanedValue);
 
-        const updatedForm = {
-            ...formData,
-            [name]: cleanedValue
-        };
+            let updatedErrors = {
+                ...errors,
+                [name]: fieldError
+            };
 
-        setFormData(updatedForm);
+            //  revalidate confirmPassword, if password changes
+            if (name === "password" && updatedData.confirmPassword) {
+                updatedErrors.confirmPassword = validateField(
+                    "confirmPassword",
+                    updatedData.confirmPassword
+                );
+            }
 
-        const fieldError = validateField(name, cleanedValue);
+            setErrors(updatedErrors);
 
-        setErrors((prev) => ({
-            ...prev,
-            [name]: fieldError
-        }));
+            return updatedData;
+        });
     };
-
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
-
         const fieldError = validateField(name, value);
-
-        setErrors((prev) => ({
-            ...prev,
-            [name]: fieldError
-        }));
+        setErrors((prev) => ({ ...prev, [name]: fieldError }));
     };
 
     const handleRegister = async () => {
-        const validationErrors = validate(formData);
-
+        const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
@@ -194,16 +157,16 @@ const Signup = () => {
 
                 <p className="text-4xl">Register</p>
 
-                {/* name */}
+                {/* Name */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Name <span className="text-red-500">*</span></label>
                     <input
                         type="text"
                         name="name"
                         placeholder="Enter name"
-                        onBlur={handleBlur}
                         value={formData.name}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name
                             ? "border-red-500 focus:ring-red-200"
                             : "border-gray-500 focus:ring-blue-500"
@@ -212,17 +175,17 @@ const Signup = () => {
                     {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
 
-                {/* email */}
+                {/* Email */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Email <span className="text-red-500">*</span></label>
                     <input
                         type="email"
                         name="email"
                         placeholder="Enter email"
-                        onBlur={handleBlur}
                         value={formData.email}
                         onChange={handleChange}
-                        className={`bg-white px-3 py-2 border rounded  focus:outline-none focus:ring-2 ${errors.email
+                        onBlur={handleBlur}
+                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.email
                             ? "border-red-500 focus:ring-red-200"
                             : "border-gray-500 focus:ring-blue-500"
                             }`}
@@ -230,16 +193,16 @@ const Signup = () => {
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
 
-                {/* password */}
+                {/* Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Password <span className="text-red-500">*</span></label>
                     <input
                         type="password"
                         name="password"
                         placeholder="Enter password"
-                        onBlur={handleBlur}
                         value={formData.password}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
                             ? "border-red-500 focus:ring-red-200"
                             : "border-gray-500 focus:ring-blue-500"
@@ -248,24 +211,22 @@ const Signup = () => {
                     {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                 </div>
 
-                {/* confirm password */}
+                {/* Confirm Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Confirm Password <span className="text-red-500">*</span></label>
                     <input
                         type="password"
                         name="confirmPassword"
                         placeholder="Confirm password"
-                        onBlur={handleBlur}
                         value={formData.confirmPassword}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.confirmPassword
                             ? "border-red-500 focus:ring-red-200"
                             : "border-gray-500 focus:ring-blue-500"
                             }`}
                     />
-                    {errors.confirmPassword && (
-                        <span className="text-red-500 text-xs">{errors.confirmPassword}</span>
-                    )}
+                    {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
                 </div>
 
                 <button

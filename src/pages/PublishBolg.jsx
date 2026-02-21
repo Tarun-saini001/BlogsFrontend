@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import {useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const PublishBlog = () => {
     const API = import.meta.env.VITE_API_URL;
@@ -51,7 +52,7 @@ const PublishBlog = () => {
 
             if (response.ok) {
                 // alert("Blog Published Successfully ");
-                console.log('Blog Published Successfully ');
+                toast.success('Blog Published Successfully ');
 
                 // Clear form
                 setTitle("");

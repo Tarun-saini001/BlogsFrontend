@@ -23,8 +23,9 @@ const VerifyOtp = () => {
 
     // Timer logic
     useEffect(() => {
+        if (!expiresAt) return;
         const interval = setInterval(() => { // runs after 1000 ms
-            const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));  
+            const remaining = Math.max(0, Math.floor((expiresAt - Date.now()) / 1000));
             setTimeLeft(remaining);
 
             if (remaining <= 0) {
@@ -42,6 +43,12 @@ const VerifyOtp = () => {
     };
 
     const handleVerifyOtp = async () => {
+
+        if (!otp.trim()) {
+            setError("OTP is required");
+            return;
+        }
+
         if (!/^\d{4}$/.test(otp)) {
             setError("OTP must be 4 digits");
             return;
@@ -67,6 +74,7 @@ const VerifyOtp = () => {
             });
 
             const data = await response.json();
+            console.log('data: (verify otp) ', data);
 
             if (response.ok && data?.data?.token) {
                 login(data.data.token);
@@ -91,9 +99,15 @@ const VerifyOtp = () => {
 
                 <input
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     maxLength={4}
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "");
+                        setOtp(value);
+                        setError("");
+                    }}
                     placeholder="Enter 4-digit OTP"
                     className="border px-3 py-2 rounded"
                 />

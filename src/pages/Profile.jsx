@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import WriteBlog from "../components/WriteBlog";
+import { toast } from "react-toastify";
 
 const Profile = () => {
     const { logout, updateProfilePic } = useContext(AuthContext);
@@ -11,11 +12,40 @@ const Profile = () => {
     const [userBlogs, setUserBlogs] = useState([]);
     const [profileImage, setProfileImage] = useState(null);
 
+    const [userName, setUserName] = useState("");
+    const [isEditingName, setIsEditingName] = useState(false);
+
     useEffect(() => {
         fetchMyBlogs();
         fetchProfile();
     }, []);
 
+    const handleUpdateName = async () => {
+        try {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(`${API}/onBoarding/user/updateProfile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ name: userName }),
+            });
+
+            const data = await response.json();
+            console.log('data: (upadte name) ', data);
+
+            if (response.ok) {
+                toast.success("Name updated successfully");
+                setIsEditingName(false);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const fetchProfile = async () => {
         try {
@@ -26,8 +56,10 @@ const Profile = () => {
             });
 
             const data = await response.json();
+            console.log('data: ', data);
             if (response.ok) {
                 setProfileImage(data.data.profilePic);
+                setUserName(data.data.name);
             }
         } catch (error) {
             console.error(error);
@@ -80,6 +112,7 @@ const Profile = () => {
                 updateProfilePic(data.data.profilePic)
             }
         } catch (error) {
+            toast.success(error.message)
             console.error(error);
         }
     };
@@ -89,6 +122,7 @@ const Profile = () => {
 
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md space-y-6">
 
+                {/* profile */}
                 {/* profile */}
                 <div className="flex flex-col items-center space-y-4">
 
@@ -102,6 +136,30 @@ const Profile = () => {
                         className="w-28 h-28 rounded-full object-cover"
                     />
 
+                    {/* USER NAME */}
+                    {isEditingName ? (
+                        <div className="flex space-x-2">
+                            <input
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                className="border px-2 py-1 rounded-md"
+                            />
+                            <button
+                                onClick={handleUpdateName}
+                                className="bg-black text-white px-3 rounded-md"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    ) : (
+                        <h2
+                            onClick={() => setIsEditingName(true)}
+                            className="text-xl font-semibold cursor-pointer hover:text-blue-600"
+                        >
+                            {userName}
+                        </h2>
+                    )}
+
                     <label className="text-blue-600 cursor-pointer text-sm">
                         Change Profile Picture
                         <input
@@ -112,16 +170,12 @@ const Profile = () => {
                     </label>
 
                     <button
-                        onClick={() => navigate("/change-password")}
-                        className="bg-black text-white px-4 py-2 rounded-md"
-                    >
-                        Change Password
-                    </button>
-
-                    <button
                         onClick={() => {
-                            logout();
-                            navigate("/");
+                            const confirmLogout = window.confirm("Are you sure you want to logout?");
+                            if (confirmLogout) {
+                                logout();
+                                navigate("/");
+                            }
                         }}
                         className="text-red-500"
                     >
