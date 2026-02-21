@@ -1,17 +1,43 @@
 import React, { useState, useContext } from "react";
-import {useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 
 const PublishBlog = () => {
     const API = import.meta.env.VITE_API_URL;
+    const { isLoggedIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+
     const [image, setImage] = useState(null);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { isLoggedIn } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const MAX_TITLE_LENGTH = 150;
+    const MIN_TITLE_LENGTH = 5;
+    const MAX_CONTENT_LENGTH = 5000;
+    const MIN_CONTENT_LENGTH = 20;
+
+    // Image validation handler
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (!file) {
+            setImage(null);
+            return;
+        }
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Only JPG, PNG, or WEBP images are allowed!");
+            e.target.value = ""; // reset input
+            setImage(null);
+            return;
+        }
+
+        setImage(file);
+    };
 
     const handlePublish = async (e) => {
         e.preventDefault();
@@ -21,53 +47,62 @@ const PublishBlog = () => {
             return;
         }
 
+        // Validate title & content length
+        if (title.trim().length < MIN_TITLE_LENGTH) {
+            toast.error(`Title must be at least ${MIN_TITLE_LENGTH} characters`);
+            return;
+        }
+
+        if (title.trim().length > MAX_TITLE_LENGTH) {
+            toast.error(`Title cannot exceed ${MAX_TITLE_LENGTH} characters`);
+            return;
+        }
+
+        if (content.trim().length < MIN_CONTENT_LENGTH) {
+            toast.error(`Content must be at least ${MIN_CONTENT_LENGTH} characters`);
+            return;
+        }
+
+        if (content.trim().length > MAX_CONTENT_LENGTH) {
+            toast.error(`Content cannot exceed ${MAX_CONTENT_LENGTH} characters`);
+            return;
+        }
+
         try {
             setLoading(true);
-
             const token = localStorage.getItem("token");
-            console.log("TOKEN FROM STORAGE:", token);
 
             const formData = new FormData();
-            formData.append("title", title);
-            formData.append("content", content);
+            formData.append("title", title.trim());
+            formData.append("content", content.trim());
 
-            if (image) {
-                formData.append("img", image);
-            }
-            console.log('API: ', API);
+            if (image) formData.append("img", image);
 
-            const response = await fetch(
-                `${API}/blogs/user/addBlog`, // adjust if needed
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: formData,
-                }
-            );
+            const response = await fetch(`${API}/blogs/user/addBlog`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
 
             const data = await response.json();
-            console.log("API response:", data);
 
             if (response.ok) {
-                // alert("Blog Published Successfully ");
-                toast.success('Blog Published Successfully ');
+                toast.success("Blog Published Successfully");
 
                 // Clear form
                 setTitle("");
                 setContent("");
                 setImage(null);
 
-                // Redirect to My Blogs
                 navigate("/");
             } else {
-                alert(data.message);
+                toast.error(data.message || "Failed to publish blog");
             }
-        } catch (error) {
-            console.error(error);
-            console.log("catchhhhh");
-            // alert("Server error");
+        } catch (err) {
+            console.error(err);
+            toast.error("Server error. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -84,14 +119,12 @@ const PublishBlog = () => {
                 {/* Image Upload */}
                 <div className="space-y-3">
                     <label className="font-semibold text-lg">Choose Cover Image</label>
-
                     <input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
+                        onChange={handleImageChange}
                         className="border p-2 rounded-md w-full"
                     />
-
                     {image && (
                         <img
                             src={URL.createObjectURL(image)}
@@ -101,7 +134,7 @@ const PublishBlog = () => {
                     )}
                 </div>
 
-                {/* title */}
+                {/* Title */}
                 <div className="space-y-2">
                     <label className="font-semibold text-lg">Title</label>
                     <input
@@ -109,11 +142,12 @@ const PublishBlog = () => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full p-3 border rounded-md"
+                        placeholder="Enter blog title"
                         required
                     />
                 </div>
 
-                {/* content */}
+                {/* Content */}
                 <div className="space-y-2">
                     <label className="font-semibold text-lg">Content</label>
                     <textarea
@@ -121,6 +155,7 @@ const PublishBlog = () => {
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         className="w-full p-3 border rounded-md"
+                        placeholder="Write your blog content here..."
                         required
                     />
                 </div>

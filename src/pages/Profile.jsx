@@ -14,6 +14,7 @@ const Profile = () => {
 
     const [userName, setUserName] = useState("");
     const [isEditingName, setIsEditingName] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
     useEffect(() => {
         fetchMyBlogs();
@@ -90,12 +91,23 @@ const Profile = () => {
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-        if (!file) return;
-        // check file type
-        if (!file.type.startsWith("image/")) {
-            toast.error("Only image files are allowed!");
+
+        if (!file) {
+            setProfileImage(null);
             return;
         }
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+        const maxSizeMB = 5;
+
+        // ✅ Type validation
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Only JPG, PNG, or WEBP images are allowed!");
+            e.target.value = "";
+            return;
+        }
+
+
         const token = localStorage.getItem("token");
 
         const formData = new FormData();
@@ -109,28 +121,26 @@ const Profile = () => {
                 },
                 body: formData,
             });
+
             const data = await response.json();
-            console.log('data: (profile pic) ', data);
 
             if (response.ok) {
+                toast.success("Profile picture updated successfully");
                 setProfileImage(data.data.profilePic);
-                updateProfilePic(data.data.profilePic)
-                toast.success("Profile pic updated successfully!")
+                updateProfilePic(data.data.profilePic);
             } else {
-                toast.error(data.message || "Failed to upload image");
+                toast.error(data.message || "Upload failed");
             }
         } catch (error) {
-            console.error(err);
-            toast.error("Something went wrong while uploading the image");
+            console.error(error);
+            toast.error("Server error. Please try again.");
         }
     };
-
     return (
         <div className="min-h-screen bg-gray-100 p-6">
 
             <div className="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-md space-y-6">
 
-                {/* profile */}
                 {/* profile */}
                 <div className="flex flex-col items-center space-y-4">
 
@@ -141,10 +151,11 @@ const Profile = () => {
                                 : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                         }
                         alt="profile"
-                        className="w-28 h-28 rounded-full object-cover"
+                        onClick={() => setShowPreview(true)}
+                        className="w-28 h-28 rounded-full object-cover cursor-pointer hover:opacity-80 transition"
                     />
 
-                    {/* USER NAME */}
+                    {/* user name */}
                     {isEditingName ? (
                         <div className="flex space-x-2">
                             <input
@@ -227,6 +238,35 @@ const Profile = () => {
                 </div>
 
             </div>
+            {/* image preview */}
+            {showPreview && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                    onClick={() => setShowPreview(false)}
+                >
+                    <div
+                        className="relative"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={
+                                profileImage
+                                    ? `${API}${profileImage}`
+                                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                            }
+                            alt="Large Profile"
+                            className="w-96 h-96 object-cover rounded-xl shadow-xl"
+                        />
+
+                        <button
+                            onClick={() => setShowPreview(false)}
+                            className="absolute top-2 right-2 bg-white cursor-pointer w-4 h-5 flex justify-center items-center rounded-full shadow-md"
+                        >
+                            x
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
