@@ -100,7 +100,7 @@ const Profile = () => {
         const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
         const maxSizeMB = 5;
 
-        // ✅ Type validation
+        // type validation
         if (!allowedTypes.includes(file.type)) {
             toast.error("Only JPG, PNG, or WEBP images are allowed!");
             e.target.value = "";
@@ -188,18 +188,29 @@ const Profile = () => {
                         />
                     </label>
 
-                    <button
-                        onClick={() => {
-                            const confirmLogout = window.confirm("Are you sure you want to logout?");
-                            if (confirmLogout) {
-                                logout();
-                                navigate("/");
-                            }
-                        }}
-                        className="text-red-500"
-                    >
-                        Logout
-                    </button>
+                    <div className="flex flex-col items-center space-y-2">
+
+                        <button
+                            onClick={() => navigate("/change-password")}
+                            className="text-white  bg-black cursor-pointer rounded p-1"
+                        >
+                            Change Password
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                const confirmLogout = window.confirm("Are you sure you want to logout?");
+                                if (confirmLogout) {
+                                    logout();
+                                    navigate("/");
+                                }
+                            }}
+                            className="text-red-500 hover:underline"
+                        >
+                            Logout
+                        </button>
+
+                    </div>
                 </div>
 
                 {/* blogs list */}
