@@ -100,19 +100,6 @@ const MyBlogs = () => {
                       ...Read More 
                     </button>
 
-                    <button
-                      onClick={() => navigate(`/edit-blog/:id`)}
-                      className="text-green-300 w-10 rounded font-semibold"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(blog._id)}
-                      className="text-red-300 rounded  font-semibold"
-                    >
-                      Delete
-                    </button>
                   </div>
 
                 </div>
@@ -122,7 +109,7 @@ const MyBlogs = () => {
         )}
       </div>
 
-      {/* Write Blog Button at Bottom */}
+      {/* write blogs*/}
       {isLoggedIn && (
         <div className="flex justify-center py-10">
           <WriteBlog />
