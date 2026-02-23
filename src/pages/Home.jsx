@@ -44,13 +44,16 @@ const Home = () => {
         {/* <p className='text-white font-bold w-80 text-center text-3xl mt-[42%] p-1 rounded-2xl bg-black ml-[10%]'>Share you experience</p>
         {isLoggedIn && <WriteBlog />} */}
       </div>
-      <div className='flex mt-10 gap-10 justify-center items-center'>
-         <p className='text-black font-bold w-80 text-center text-3xl  p-2 rounded-2xl bg-white shadow'>Share you experience</p>
+
+      {isLoggedIn && (
+        <div className='flex mt-10 gap-10 justify-center items-center'>
+        <p className='text-black font-bold w-80 text-center text-3xl  p-2 rounded-2xl bg-white shadow'>Share you experience</p>
         {isLoggedIn && <WriteBlog />}
       </div>
-      
-      {/* Latest Blogs Section */}
-     { isLoggedIn&& (<div className="max-w-6xl mx-auto py-10 px-4">
+      )}
+
+      {/* latest blogs list */}
+      {isLoggedIn && (<div className="max-w-6xl mx-auto py-10 px-4">
         <h2 className="text-2xl font-bold mb-6">Latest Blogs</h2>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -69,6 +72,19 @@ const Home = () => {
               )}
 
               <div className="p-4 space-y-3">
+                {/* Author information */}
+                <div className="flex items-center space-x-3 mb-6">
+                  <img
+                    src={blog.author?.profilePic ? `${API}${blog.author.profilePic}` : "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+                    alt="author"
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div className='flex justify-between w-full items-center'>
+                    <p className="font-semibold text-lg">{blog.author?.name || "Unknown User"}</p>
+                    <p className="text-sm text-gray-500">{new Date(blog.createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+
                 <h3 className="text-xl font-semibold">{blog.title}</h3>
 
                 {/* First 3-4 lines */}
@@ -87,7 +103,7 @@ const Home = () => {
             </div>
           ))}
         </div>
-      </div> )}
+      </div>)}
     </div>
   )
 }

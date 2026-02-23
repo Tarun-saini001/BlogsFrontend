@@ -261,6 +261,15 @@ const Profile = () => {
                                     <p className="text-gray-600 line-clamp-2">
                                         {blog.content}
                                     </p>
+                                    <div className="flex justify-between items-center pt-2">
+                                        <button
+                                            onClick={() => navigate(`/blog/${blog._id}`)}
+                                            className="text-blue-600 font-semibold"
+                                        >
+                                            ...Read More
+                                        </button>
+
+                                    </div>
                                 </div>
                             ))}
                         </div>

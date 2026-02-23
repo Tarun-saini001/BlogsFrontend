@@ -76,7 +76,7 @@ const BlogDetails = () => {
                     alt="author"
                     className="w-12 h-12 rounded-full object-cover"
                 />
-                <div>
+                <div className="flex justify-between items-center w-full">
                     <p className="font-semibold text-lg">{blog.author?.name || "Unknown User"}</p>
                     <p className="text-sm text-gray-500">{new Date(blog.createdAt).toLocaleDateString()}</p>
                 </div>
