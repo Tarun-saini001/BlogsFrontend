@@ -233,6 +233,30 @@ const Profile = () => {
                                             className="w-full h-48 object-cover rounded-md mb-3"
                                         />
                                     )}
+
+                                    {/* Author info */}
+                                    <div className="flex items-center mb-2 space-x-3">
+                                        <img
+                                            src={
+                                                blog.author?.profilePic
+                                                    ? `${API}${blog.author.profilePic}`
+                                                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                                            }
+                                            alt="author"
+                                            className="w-8 h-8 rounded-full object-cover"
+                                        />
+
+                                        <div className="flex justify-between items-center w-full">
+                                            <p className="text-sm font-semibold">
+                                                {blog.author?.name || "Unknown User"}
+                                            </p>
+                                            <p className="text-xs text-gray-500">
+                                                {blog.createdAt
+                                                    ? new Date(blog.createdAt).toLocaleDateString()
+                                                    : ""}
+                                            </p>
+                                        </div>
+                                    </div>
                                     <h3 className="font-semibold">{blog.title}</h3>
                                     <p className="text-gray-600 line-clamp-2">
                                         {blog.content}

@@ -40,10 +40,15 @@ const Home = () => {
 
   return (
     <div className=' h-screen '>
-      <div className='  h-[70%] w-full  bg-[url(./img/home.jpg)] bg-cover flex justify-center space-y-6 flex-col'>
-        <p className='text-amber-500 text-3xl font-bold ml-[25%]'>Welcome<br /> Wild life Blogs</p>
+      <div className='  h-full w-full  bg-[url(./img/homepage.png)] bg-cover flex justify-center space-y-6 flex-col'>
+        {/* <p className='text-white font-bold w-80 text-center text-3xl mt-[42%] p-1 rounded-2xl bg-black ml-[10%]'>Share you experience</p>
+        {isLoggedIn && <WriteBlog />} */}
+      </div>
+      <div className='flex mt-10 gap-10 justify-center items-center'>
+         <p className='text-black font-bold w-80 text-center text-3xl  p-2 rounded-2xl bg-white shadow'>Share you experience</p>
         {isLoggedIn && <WriteBlog />}
       </div>
+      
       {/* Latest Blogs Section */}
      { isLoggedIn&& (<div className="max-w-6xl mx-auto py-10 px-4">
         <h2 className="text-2xl font-bold mb-6">Latest Blogs</h2>

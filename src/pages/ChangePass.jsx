@@ -147,8 +147,7 @@ const ChangePass = () => {
             if (response.ok) {
                 toast.success("Password changed successfully");
                 navigate("/profile");
-            } 
-            if (!response.ok) {
+            } if (!response.ok) {
                 if (data?.message?.toLowerCase().includes("old password")) {
                     setErrors((prev) => ({
                         ...prev,

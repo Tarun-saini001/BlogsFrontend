@@ -86,6 +86,31 @@ const MyBlogs = () => {
                 )}
 
                 <div className="p-4 space-y-3">
+
+                  {/* Author info */}
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={
+                        blog.author?.profilePic
+                          ? `${API}${blog.author.profilePic}`
+                          : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                      }
+                      alt="author"
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+
+                    <div className="flex justify-between items-center w-full">
+                      <p className="text-sm font-semibold">
+                        {blog.author?.name || "Unknown User"}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {blog.createdAt
+                          ? new Date(blog.createdAt).toLocaleDateString()
+                          : ""}
+                      </p>
+                    </div>
+                  </div>
+
                   <h3 className="text-xl font-semibold">{blog.title}</h3>
 
                   <p className="text-gray-600 line-clamp-3">
@@ -97,7 +122,7 @@ const MyBlogs = () => {
                       onClick={() => navigate(`/blog/${blog._id}`)}
                       className="text-blue-600 font-semibold"
                     >
-                      ...Read More 
+                      ...Read More
                     </button>
 
                   </div>

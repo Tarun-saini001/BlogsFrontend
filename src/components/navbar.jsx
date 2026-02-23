@@ -10,12 +10,12 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <div className='bg-black h-[8%] text-white flex justify-between'>
+        <div className='bg-white h-[8%] rounded  text-black flex m-2 shadow justify-between'>
             <p
-                className='text-sm pl-10 flex justify-center items-center cursor-pointer'
+                className='text-sm pl-10 flex justify-center font-bold shadow-2xl items-center cursor-pointer'
                 onClick={() => navigate("/")}
             >
-                INTERESTING<br />BLOGS
+                WILD LIFE
             </p>
 
             <nav className='flex justify-between items-center pr-10 w-[60%]'>
@@ -54,13 +54,13 @@ const Navbar = () => {
                         <>
                             <button
                                 onClick={() => navigate("/signup")}
-                                className="bg-white text-black w-20 cursor-pointer rounded-md"
+                                className="bg-white text-black shadow w-20 cursor-pointer rounded-md"
                             >
                                 Register
                             </button>
                             <button
                                 onClick={() => navigate("/login")}
-                                className="bg-white text-black w-20 cursor-pointer rounded-md"
+                                className="bg-white text-black w-20 shadow cursor-pointer rounded-md"
                             >
                                 Login
                             </button>
