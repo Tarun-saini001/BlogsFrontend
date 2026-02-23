@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -15,6 +17,8 @@ const Signup = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // Validate single field for onBlur
     const validateField = (name, value) => {
@@ -36,6 +40,8 @@ const Signup = () => {
             case "password":
                 if (!value.trim()) {
                     error = "Password is required";
+                } else if (value.length < 6) {
+                    error = "Password must be at least 6 characters"
                 } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).+$/.test(value)) {
                     error = "Password must contain at least one alphabet, one number, and one special character";
                 }
@@ -102,6 +108,7 @@ const Signup = () => {
 
             return updatedData;
         });
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const handleBlur = (e) => {
@@ -118,6 +125,7 @@ const Signup = () => {
         }
 
         try {
+            console.log("reached");
             const response = await fetch(`${API}/onBoarding/user/signup`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -130,6 +138,8 @@ const Signup = () => {
             });
 
             const data = await response.json();
+            console.log("STATUS:", response.status);
+            console.log("RESPONSE:", data);
 
             if (response.ok && data.statusCode === 200) {
                 navigate("/verify-otp", {
@@ -196,37 +206,65 @@ const Signup = () => {
                 {/* Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Password <span className="text-red-500">*</span></label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password
-                            ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-500 focus:ring-blue-500"
-                            }`}
-                    />
-                    {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
+
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Enter password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`bg-white px-3 py-2 pr-10 border rounded w-full focus:outline-none focus:ring-2 ${errors.password
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-500 focus:ring-blue-500"
+                                }`}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                        >
+                            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        </button>
+                    </div>
+
+                    {errors.password && (
+                        <span className="text-red-500 text-xs">{errors.password}</span>
+                    )}
                 </div>
 
                 {/* Confirm Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
                     <label>Confirm Password <span className="text-red-500">*</span></label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.confirmPassword
-                            ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-500 focus:ring-blue-500"
-                            }`}
-                    />
-                    {errors.confirmPassword && <span className="text-red-500 text-xs">{errors.confirmPassword}</span>}
+
+                    <div className="relative">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            placeholder="Confirm password"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`bg-white px-3 py-2 pr-10 border rounded w-full focus:outline-none focus:ring-2 ${errors.confirmPassword
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-500 focus:ring-blue-500"
+                                }`}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                        >
+                            {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        </button>
+                    </div>
+
+                    {errors.confirmPassword && (
+                        <span className="text-red-500 text-xs">{errors.confirmPassword}</span>
+                    )}
                 </div>
 
                 <button

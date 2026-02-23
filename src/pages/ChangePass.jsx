@@ -16,8 +16,9 @@ const ChangePass = () => {
     const [loading, setLoading] = useState(false);
 
 
-    const validateField = (name, value) => {
+    const validateField = (name, value, updatedForm = formData) => {
         let error = "";
+
         switch (name) {
             case "currentPassword":
                 if (!value.trim()) {
@@ -33,7 +34,7 @@ const ChangePass = () => {
                     error = "Password must be at least 6 characters long";
                 }
                 else if (!/[A-Za-z]/.test(value)) {
-                    error = "Password must contain at least one alphabet";
+                    error = "Password must contain at least one letter";
                 }
                 else if (!/[0-9]/.test(value)) {
                     error = "Password must contain at least one number";
@@ -41,7 +42,7 @@ const ChangePass = () => {
                 else if (!/[!@#$%^&*]/.test(value)) {
                     error = "Password must contain at least one special character";
                 }
-                else if (value === formData.currentPassword) {
+                else if (value === updatedForm.currentPassword) {
                     error = "New password cannot be same as current password";
                 }
                 break;
@@ -50,7 +51,10 @@ const ChangePass = () => {
                 if (!value.trim()) {
                     error = "Confirm password is required";
                 }
-                else if (value !== formData.newPassword) {
+                else if (!updatedForm.newPassword) {
+                    error = "Please enter new password first";
+                }
+                else if (value !== updatedForm.newPassword) {
                     error = "Passwords do not match";
                 }
                 break;
@@ -61,7 +65,6 @@ const ChangePass = () => {
 
         return error;
     };
-
     const validate = () => {
         const newErrors = {};
 
@@ -81,12 +84,24 @@ const ChangePass = () => {
         const { name, value } = e.target;
         const cleanedValue = value.trimStart();
 
-        setFormData((prev) => ({
-            ...prev,
+        const updatedForm = {
+            ...formData,
             [name]: cleanedValue
-        }));
-        
+        };
 
+        setFormData(updatedForm);
+
+        // Revalidate current field
+        const fieldError = validateField(name, cleanedValue, updatedForm);
+
+        setErrors((prev) => ({
+            ...prev,
+            [name]: fieldError,
+            confirmPassword:
+                name === "newPassword"
+                    ? validateField("confirmPassword", updatedForm.confirmPassword, updatedForm)
+                    : prev.confirmPassword
+        }));
     };
 
     const handleBlur = (e) => {
@@ -132,19 +147,24 @@ const ChangePass = () => {
             if (response.ok) {
                 toast.success("Password changed successfully");
                 navigate("/profile");
-            } else {
-                if (data.message.includes("Old password")) {
+            } 
+            if (!response.ok) {
+                if (data?.message?.toLowerCase().includes("old password")) {
                     setErrors((prev) => ({
                         ...prev,
                         currentPassword: "Current password is incorrect"
                     }));
                 } else {
-                    toast.error(data.message || "Failed to change password");
+                    toast.error(data?.message || "Failed to change password");
                 }
+                return;
             }
 
         } catch (error) {
-            setErrors({ general: "Something went wrong" });
+            toast.error("Server error. Please try again.");
+        }
+        finally {
+            setLoading(false);
         }
     };
 

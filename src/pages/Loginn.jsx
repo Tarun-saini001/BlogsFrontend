@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
     const { login } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const Login = () => {
     });
 
     const [errors, setErrors] = useState({});
-
+    const [showPassword, setShowPassword] = useState(false);
     // Single-field validation for onBlur
     const validateField = (name, value) => {
         let error = "";
@@ -25,7 +26,7 @@ const Login = () => {
             name === "email" &&
             !/^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,3}$/.test(value)
         ) {
-            error = "Email must be like example@domain.com (letters only in domain)";
+            error = "Invalid email address";
         }
 
         return error;
@@ -44,7 +45,7 @@ const Login = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        // setErrors((prev) => ({ ...prev, [name]: "" }));
+        setErrors((prev) => ({ ...prev, [name]: "" }));
     };
 
     const handleBlur = (e) => {
@@ -115,22 +116,35 @@ const Login = () => {
                     />
                     {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                 </div>
-
                 <div className="w-[80%] flex flex-col space-y-1">
-                    <label className="text-sm font-medium text-left">
-                        Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder='Enter Password'
-                        value={formData.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.password ? "border-red-500 focus:ring-red-200" : "border-gray-500 focus:ring-blue-500"
-                            }`}
-                    />
-                    {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
+                    <label>Password <span className="text-red-500">*</span></label>
+
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Enter password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`bg-white px-3 py-2 pr-10 border rounded w-full focus:outline-none focus:ring-2 ${errors.password
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-500 focus:ring-blue-500"
+                                }`}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                        >
+                            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        </button>
+                    </div>
+
+                    {errors.password && (
+                        <span className="text-red-500 text-xs">{errors.password}</span>
+                    )}
                 </div>
 
                 {errors.general && <span className="text-red-600 text-sm text-center">{errors.general}</span>}
@@ -148,6 +162,12 @@ const Login = () => {
                         Register
                     </Link>
                 </div>
+                <p
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-blue-600 font-medium cursor-pointer text-sm"
+                >
+                    Forgot Password?
+                </p>
 
             </div>
         </div>

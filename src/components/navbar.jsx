@@ -54,13 +54,13 @@ const Navbar = () => {
                         <>
                             <button
                                 onClick={() => navigate("/signup")}
-                                className="bg-white text-black w-20 rounded-md"
+                                className="bg-white text-black w-20 cursor-pointer rounded-md"
                             >
                                 Register
                             </button>
                             <button
                                 onClick={() => navigate("/login")}
-                                className="bg-white text-black w-20 rounded-md"
+                                className="bg-white text-black w-20 cursor-pointer rounded-md"
                             >
                                 Login
                             </button>
