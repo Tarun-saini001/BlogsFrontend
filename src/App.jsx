@@ -13,6 +13,7 @@ import VerifyOtp from './pages/VerifyOtp'
 import Profile from './pages/Profile'
 import ChangePass from './pages/changePass'
 import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 
 
@@ -34,6 +35,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/change-password' element={<ChangePass />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
 
       </Routes>
     </div>

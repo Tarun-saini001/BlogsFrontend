@@ -65,7 +65,15 @@ const MyBlogs = () => {
 
       {/* Page Title */}
       <div className="max-w-6xl mx-auto py-10 px-4">
-        <h2 className="text-3xl font-bold mb-8">My Blogs</h2>
+        <div className="flex  justify-between my-5 items-center">
+          <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
+          {isLoggedIn && (
+            <div className='flex  gap-5 justify-center items-center'>
+              <p className='text-gray-500  text-center text-3xs   rounded-2xl bg-white '>Share you experience</p>
+              {isLoggedIn && <WriteBlog />}
+            </div>
+          )}
+        </div>
 
         {blogs.length === 0 ? (
           <p className="text-gray-500">You haven't written any blogs yet.</p>
@@ -135,11 +143,11 @@ const MyBlogs = () => {
       </div>
 
       {/* write blogs*/}
-      {isLoggedIn && (
+      {/* {isLoggedIn && (
         <div className="flex justify-center py-10">
           <WriteBlog />
         </div>
-      )}
+      )} */}
 
     </div>
   )

@@ -195,6 +195,7 @@ const ChangePass = () => {
                             {errors.currentPassword}
                         </span>
                     )}
+
                 </div>
 
                 {/* New Password */}
@@ -257,7 +258,12 @@ const ChangePass = () => {
                 >
                     Change
                 </button>
-
+                <p
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-blue-600 font-medium cursor-pointer text-sm"
+                >
+                    Forgot Password?
+                </p>
             </div>
         </div>
     );

@@ -12,13 +12,13 @@ const Navbar = () => {
     return (
         <div className='bg-white h-[8%] rounded  text-black flex m-2 shadow justify-between'>
             <p
-                className='text-sm pl-10 flex justify-center font-bold shadow-2xl items-center cursor-pointer'
+                className='text-sm pl-10 flex justify-center  font-bold shadow-2xl items-center cursor-pointer'
                 onClick={() => navigate("/")}
             >
                 WILD LIFE
             </p>
 
-            <nav className='flex justify-between items-center pr-10 w-[60%]'>
+            <nav className='flex justify-between items-center bg-white pr-10 w-[60%]'>
 
                 <ul className='flex space-x-10 items-center'>
                     <li onClick={() => navigate("/")}

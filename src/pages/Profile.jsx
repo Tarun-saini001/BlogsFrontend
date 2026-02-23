@@ -5,6 +5,7 @@ import WriteBlog from "../components/WriteBlog";
 import { toast } from "react-toastify";
 
 const Profile = () => {
+    const { isLoggedIn } = useContext(AuthContext);
     const { logout, updateProfilePic } = useContext(AuthContext);
     const navigate = useNavigate();
     const API = import.meta.env.VITE_API_URL;
@@ -213,10 +214,24 @@ const Profile = () => {
                     </div>
                 </div>
 
+                {/* {isLoggedIn && (
+                    <div className='flex mt-10  gap-5 justify-center items-center'>
+                        <p className='text-gray-500  text-center text-3xs   rounded-2xl bg-white '>Share you experience</p>
+                        {isLoggedIn && <WriteBlog />}
+                    </div>
+                )} */}
+
                 {/* blogs list */}
                 <div>
-                    <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
-
+                   <div className="flex  justify-between my-5 items-center">
+                     <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
+                    {isLoggedIn && (
+                        <div className='flex  gap-5 justify-center items-center'>
+                            <p className='text-gray-500  text-center text-3xs   rounded-2xl bg-white '>Share you experience</p>
+                            {isLoggedIn && <WriteBlog />}
+                        </div>
+                    )}
+                   </div>
                     {userBlogs.length === 0 ? (
                         <p>No blogs yet.</p>
                     ) : (
@@ -277,9 +292,9 @@ const Profile = () => {
                 </div>
 
 
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                     <WriteBlog />
-                </div>
+                </div> */}
 
             </div>
             {/* image preview */}

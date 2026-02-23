@@ -18,7 +18,7 @@ const VerifyOtp = () => {
     useEffect(() => {
         if (!email) {
             navigate("/signup");
-        }
+        }   
     }, []);
 
     // Timer logic
@@ -67,7 +67,7 @@ const VerifyOtp = () => {
                 body: JSON.stringify({
                     email,
                     otp: Number(otp),
-                    otpType: 1,
+                    otpType: location.state?.otpType || 1,
                     name,
                     password
                 })
@@ -76,8 +76,19 @@ const VerifyOtp = () => {
             const data = await response.json();
             console.log('data: (verify otp) ', data);
 
-            if (response.ok && data?.data?.token) {
-                login(data.data.token);
+            if (response.ok) {
+
+                // forgot password
+                if (location.state?.otpType === 3) {
+                    // store temp token
+                    localStorage.setItem("resetToken", data.data?.token);
+
+                    navigate("/reset-password");
+                    return;
+                }
+
+                // signup
+                login(data?.data?.token );
                 navigate("/");
             } else {
                 setError(data.message || "Invalid OTP");
