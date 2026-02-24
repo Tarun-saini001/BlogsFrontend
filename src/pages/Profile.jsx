@@ -16,11 +16,27 @@ const Profile = () => {
     const [userName, setUserName] = useState("");
     const [isEditingName, setIsEditingName] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetchMyBlogs();
         fetchProfile();
     }, []);
+
+    const handleLogoutClick = () => {
+        setShowModal(true);
+    };
+
+    const confirmLogout = async () => {
+        setShowModal(false);
+
+        await logout();
+        navigate("/")
+    };
+
+    const cancelLogout = () => {
+        setShowModal(false);
+    };
 
     const handleUpdateName = async () => {
         try {
@@ -199,17 +215,21 @@ const Profile = () => {
                         </button>
 
                         <button
-                            onClick={() => {
-                                const confirmLogout = window.confirm("Are you sure you want to logout?");
-                                if (confirmLogout) {
-                                    logout();
-                                    navigate("/");
-                                }
-                            }}
+                            onClick={handleLogoutClick}
                             className="text-red-500 hover:underline"
                         >
                             Logout
                         </button>
+                        {showModal && (
+                            <div className="my-2 border-gray-300 p-2 rounded shadow">
+                                <div className=" space-y-4">
+                                    <p>Are you sure you want to logout?</p>
+                                    <div className=" px-8 flex justify-between">  <button className="bg-blue-600 rounded text-white px-2" onClick={confirmLogout}>Yes</button>
+                                        <button className=" shadow px-2 border border-gray-300 rounded" onClick={cancelLogout}>Cancel</button></div>
+
+                                </div>
+                            </div>
+                        )}
 
                     </div>
                 </div>
@@ -223,15 +243,15 @@ const Profile = () => {
 
                 {/* blogs list */}
                 <div>
-                   <div className="flex  justify-between my-5 items-center">
-                     <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
-                    {isLoggedIn && (
-                        <div className='flex  gap-5 justify-center items-center'>
-                            <p className='text-gray-500  text-center text-3xs   rounded-2xl bg-white '>Share you experience</p>
-                            {isLoggedIn && <WriteBlog />}
-                        </div>
-                    )}
-                   </div>
+                    <div className="flex  justify-between my-5 items-center">
+                        <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
+                        {isLoggedIn && (
+                            <div className='flex  gap-5 justify-center items-center'>
+                                <p className='text-gray-500  text-center text-3xs   rounded-2xl bg-white '>Share you experience</p>
+                                {isLoggedIn && <WriteBlog />}
+                            </div>
+                        )}
+                    </div>
                     {userBlogs.length === 0 ? (
                         <p>No blogs yet.</p>
                     ) : (

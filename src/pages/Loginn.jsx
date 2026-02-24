@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Login = () => {
-    const { login } = useContext(AuthContext);
+    const { login, isLoggedIn } = useContext(AuthContext);
     const API = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
 
@@ -17,6 +17,12 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     // Single-field validation for onBlur
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/");
+        }
+    });
     const validateField = (name, value) => {
         let error = "";
 

@@ -2,6 +2,10 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+ 
+// import styles from "./style.css";
 
 const PublishBlog = () => {
     const API = import.meta.env.VITE_API_URL;
@@ -14,6 +18,7 @@ const PublishBlog = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
+    const [blogText, setBlogText]= useState("");
 
     const MAX_TITLE_LENGTH = 150;
     const MIN_TITLE_LENGTH = 5;
@@ -171,6 +176,12 @@ const PublishBlog = () => {
                         required
                     />
                 </div>
+                {/* <ReactQuill
+                className="h-60"
+                    theme="snow"
+                    value={blogText}
+                    onChange={(value) => setBlogText(value)}
+                /> */}
 
                 {/* content */}
                 <div className="space-y-2">
