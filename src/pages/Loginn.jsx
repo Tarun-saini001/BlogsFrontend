@@ -16,7 +16,7 @@ const Login = () => {
 
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
-    // Single-field validation for onBlur
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -61,6 +61,7 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
+        if (loading) return; // preventing multiple clicks
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -91,12 +92,18 @@ const Login = () => {
                 navigate("/");
 
             } else {
-                toast.error(data.message || "Invalid email or password");
+                toast.error(data.message || "Invalid email or password", {
+                    toastId: "login-error"
+                });
             }
 
         } catch (error) {
             console.error(error);
-            setErrors({ general: "Something went wrong" });
+            toast.error("Something went wrong", {
+                toastId: "server-error"
+            });
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Signup = () => {
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Validate single field for onBlur
     const validateField = (name, value) => {
@@ -118,6 +120,7 @@ const Signup = () => {
     };
 
     const handleRegister = async () => {
+        if (loading) return;
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -158,6 +161,8 @@ const Signup = () => {
         } catch (error) {
             console.error("Signup error:", error);
             alert("Something went wrong. Please try again later.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -269,9 +274,10 @@ const Signup = () => {
 
                 <button
                     onClick={handleRegister}
-                    className="bg-black text-white px-4 w-[60%] py-2 rounded"
+                    disabled={loading}
+                    className="bg-black text-white px-4 w-[60%] py-2 rounded disabled:opacity-50"
                 >
-                    Register
+                    {loading ? "Registering..." : "Register"}
                 </button>
 
                 <div className="text-sm">
