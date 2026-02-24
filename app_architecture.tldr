@@ -318,7 +318,7 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 1445.5714703839988,
+			"x": 1429.347509507534,
 			"y": -396.2072028311801,
 			"rotation": 0,
 			"isLocked": false,
@@ -329,7 +329,7 @@
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 241.8229217529297,
+				"w": 274.2708435058594,
 				"font": "draw",
 				"textAlign": "middle",
 				"autoSize": true,
@@ -348,7 +348,7 @@
 							"content": [
 								{
 									"type": "text",
-									"text": "OnClick sigun/login"
+									"text": "OnClick Register/login"
 								}
 							]
 						},
@@ -1304,9 +1304,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 4680.686781377127,
-			"y": 615.2911691973745,
-			"z": 0.1362283378323335,
+			"x": -1189.011221124964,
+			"y": 465.29403411794686,
+			"z": 1.204985264464899,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -2240,10 +2240,12 @@
 			"typeName": "shape"
 		},
 		{
-			"editingShapeId": null,
+			"editingShapeId": "shape:9OJKPflwMlq6ND4Hr0oC2",
 			"croppingShapeId": null,
-			"selectedShapeIds": [],
-			"hoveredShapeId": null,
+			"selectedShapeIds": [
+				"shape:9OJKPflwMlq6ND4Hr0oC2"
+			],
+			"hoveredShapeId": "shape:9OJKPflwMlq6ND4Hr0oC2",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -5773,9 +5775,7 @@
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {
-				"tldraw:geo": "rectangle"
-			},
+			"stylesForNextShape": {},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
@@ -5807,7 +5807,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1.5,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": false,
+			"isHoveringCanvas": true,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,

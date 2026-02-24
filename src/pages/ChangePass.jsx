@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,6 +15,8 @@ const ChangePass = () => {
 
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
     const validateField = (name, value, updatedForm = formData) => {
@@ -199,52 +202,70 @@ const ChangePass = () => {
                 </div>
 
                 {/* New Password */}
+                {/* Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
-                    <label>
-                        New Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="password"
-                        name="newPassword"
-                        onBlur={handleBlur}
-                        placeholder="Enter new password"
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.newPassword
-                            ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-500 focus:ring-blue-500"
-                            }`}
-                    />
-                    {errors.newPassword && (
-                        <span className="text-red-500 text-xs">
-                            {errors.newPassword}
-                        </span>
+                    <label> New Password <span className="text-red-500">*</span></label>
+
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Enter password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`bg-white px-3 py-2 pr-10 border rounded w-full focus:outline-none focus:ring-2 ${errors.password
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-500 focus:ring-blue-500"
+                                }`}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                        >
+                            {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        </button>
+                    </div>
+
+                    {errors.password && (
+                        <span className="text-red-500 text-xs">{errors.password}</span>
                     )}
                 </div>
 
                 {/* Confirm Password */}
                 <div className="w-[80%] flex flex-col space-y-1">
-                    <label>
-                        Confirm Password <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        onBlur={handleBlur}
-                        placeholder="Confirm new password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        className={`bg-white px-3 py-2 border rounded focus:outline-none focus:ring-2 ${errors.confirmPassword
-                            ? "border-red-500 focus:ring-red-200"
-                            : "border-gray-500 focus:ring-blue-500"
-                            }`}
-                    />
+                    <label>Confirm Password <span className="text-red-500">*</span></label>
+
+                    <div className="relative">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            placeholder="Confirm password"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={`bg-white px-3 py-2 pr-10 border rounded w-full focus:outline-none focus:ring-2 ${errors.confirmPassword
+                                ? "border-red-500 focus:ring-red-200"
+                                : "border-gray-500 focus:ring-blue-500"
+                                }`}
+                        />
+
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-800"
+                        >
+                            {showConfirmPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                        </button>
+                    </div>
+
                     {errors.confirmPassword && (
-                        <span className="text-red-500 text-xs">
-                            {errors.confirmPassword}
-                        </span>
+                        <span className="text-red-500 text-xs">{errors.confirmPassword}</span>
                     )}
                 </div>
+
 
                 {errors.general && (
                     <span className="text-red-500 text-sm w-[80%] text-center">
