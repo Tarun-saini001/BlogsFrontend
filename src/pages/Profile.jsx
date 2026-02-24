@@ -221,12 +221,29 @@ const Profile = () => {
                             Logout
                         </button>
                         {showModal && (
-                            <div className="my-2 border-gray-300 p-2 rounded shadow">
-                                <div className=" space-y-4">
-                                    <p>Are you sure you want to logout?</p>
-                                    <div className=" px-8 flex justify-between">  <button className="bg-blue-600 rounded text-white px-2" onClick={confirmLogout}>Yes</button>
-                                        <button className=" shadow px-2 border border-gray-300 rounded" onClick={cancelLogout}>Cancel</button></div>
+                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                <div className="bg-white rounded-xl shadow-xl p-6 w-[90%] max-w-sm animate-fadeIn">
+                                    
 
+                                    <p className="text-sm text-gray-600 text-center mb-6">
+                                        Are you sure you want to logout?
+                                    </p>
+
+                                    <div className="flex justify-between gap-4">
+                                        <button
+                                            onClick={confirmLogout}
+                                            className="flex-1 bg-blue-600 hover:bg-red-700 text-white py-2 rounded-md transition"
+                                        >
+                                            Yes, Logout
+                                        </button>
+
+                                        <button
+                                            onClick={cancelLogout}
+                                            className="flex-1 border border-gray-300 hover:bg-gray-100 py-2 rounded-md transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )}

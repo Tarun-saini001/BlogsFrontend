@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
- 
+
 // import styles from "./style.css";
 
 const PublishBlog = () => {
@@ -18,7 +18,7 @@ const PublishBlog = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [loading, setLoading] = useState(false);
-    const [blogText, setBlogText]= useState("");
+    const [blogText, setBlogText] = useState("");
 
     const MAX_TITLE_LENGTH = 150;
     const MIN_TITLE_LENGTH = 5;
@@ -170,11 +170,15 @@ const PublishBlog = () => {
                     <input
                         type="text"
                         value={title}
+                        maxLength={MAX_TITLE_LENGTH}
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full p-3 border rounded-md"
                         placeholder="Enter blog title"
                         required
                     />
+                    <p className="text-sm text-gray-500 text-right">
+                        {title.length}/{MAX_TITLE_LENGTH}
+                    </p>
                 </div>
                 {/* <ReactQuill
                 className="h-60"
@@ -189,11 +193,15 @@ const PublishBlog = () => {
                     <textarea
                         rows="10"
                         value={content}
+                        maxLength={MAX_CONTENT_LENGTH}
                         onChange={(e) => setContent(e.target.value)}
                         className="w-full p-3 border rounded-md"
                         placeholder="Write your blog content here..."
                         required
                     />
+                    <p className="text-sm text-gray-500 text-right">
+                        {content.length}/{MAX_CONTENT_LENGTH}
+                    </p>
                 </div>
 
                 <button type="submit" disabled={loading} className="w-full bg-black text-white py-3 rounded-md">
