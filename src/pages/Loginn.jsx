@@ -157,10 +157,17 @@ const Login = () => {
 
                 <button
                     onClick={handleLogin}
-                    className="mt-4 rounded p-2 w-[40%] bg-black text-white cursor-pointer"
+                    className="mt-4 rounded p-2 w-[60%] bg-black text-white cursor-pointer"
                 >
                     Login
                 </button>
+
+                <p
+                    onClick={() => navigate("/forgot-password")}
+                    className="text-blue-600 font-medium cursor-pointer text-sm"
+                >
+                    Forgot Password?
+                </p>
 
                 <div className="w-[80%] text-center text-sm">
                     <span className="text-gray-600">Don't have an account? </span>
@@ -168,12 +175,7 @@ const Login = () => {
                         Register
                     </Link>
                 </div>
-                <p
-                    onClick={() => navigate("/forgot-password")}
-                    className="text-blue-600 font-medium cursor-pointer text-sm"
-                >
-                    Forgot Password?
-                </p>
+
 
             </div>
         </div>

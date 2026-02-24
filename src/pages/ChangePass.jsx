@@ -31,22 +31,11 @@ const ChangePass = () => {
 
             case "newPassword":
                 if (!value.trim()) {
-                    error = "New password is required";
-                }
-                else if (value.length < 6) {
-                    error = "Password must be at least 6 characters long";
-                }
-                else if (!/[A-Za-z]/.test(value)) {
-                    error = "Password must contain at least one letter";
-                }
-                else if (!/[0-9]/.test(value)) {
-                    error = "Password must contain at least one number";
-                }
-                else if (!/[!@#$%^&*]/.test(value)) {
-                    error = "Password must contain at least one special character";
-                }
-                else if (value === updatedForm.currentPassword) {
-                    error = "New password cannot be same as current password";
+                    error = "Password is required";
+                } else if (value.length < 6) {
+                    error = "Password must be at least 6 characters"
+                } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/.test(value)) {
+                    error = "Password must contain at least one uppercase letter,one lowercase letter, one number, and one special character";
                 }
                 break;
 

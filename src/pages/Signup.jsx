@@ -42,8 +42,8 @@ const Signup = () => {
                     error = "Password is required";
                 } else if (value.length < 6) {
                     error = "Password must be at least 6 characters"
-                } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).+$/.test(value)) {
-                    error = "Password must contain at least one alphabet, one number, and one special character";
+                } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/.test(value)) {
+                    error = "Password must contain at least one uppercase letter,one lowercase letter, one number, and one special character";
                 }
                 break;
 
@@ -269,7 +269,7 @@ const Signup = () => {
 
                 <button
                     onClick={handleRegister}
-                    className="bg-black text-white px-4 w-[40%] py-2 rounded"
+                    className="bg-black text-white px-4 w-[60%] py-2 rounded"
                 >
                     Register
                 </button>
