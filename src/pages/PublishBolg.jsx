@@ -190,7 +190,7 @@ const PublishBlog = () => {
                 {/* content */}
                 <div className="space-y-2">
                     <label className="font-semibold text-lg">Content</label>
-                    <textarea
+                    {/* <textarea
                         rows="10"
                         value={content}
                         maxLength={MAX_CONTENT_LENGTH}
@@ -198,6 +198,12 @@ const PublishBlog = () => {
                         className="w-full p-3 border rounded-md"
                         placeholder="Write your blog content here..."
                         required
+                    /> */}
+                    <ReactQuill
+                        theme="snow"
+                        value={content}
+                        onChange={(value) => setContent(value)}
+                        className="bg-white"
                     />
                     <p className="text-sm text-gray-500 text-right">
                         {content.length}/{MAX_CONTENT_LENGTH}

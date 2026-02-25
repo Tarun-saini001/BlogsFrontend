@@ -9,6 +9,7 @@ const BlogDetails = () => {
     const API = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetchBlog();
@@ -30,8 +31,7 @@ const BlogDetails = () => {
     };
 
     const handleDelete = async () => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this blog?");
-        if (!confirmDelete) return;
+
 
         try {
             const token = localStorage.getItem("token");
@@ -50,6 +50,8 @@ const BlogDetails = () => {
         } catch (error) {
             console.error(error);
             toast.error("Server error. Please try again.");
+        } finally {
+            setShowModal(false);
         }
     };
 
@@ -93,16 +95,45 @@ const BlogDetails = () => {
                 <div className="flex justify-end space-x-3 mt-6">
                     <button
                         onClick={() => navigate(`/edit-blog/${blog._id}`)}
-                        className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
+                        className="bg-green-500 text-white px-4 cursor-pointer py-2 rounded-md hover:bg-green-600 transition"
                     >
                         Edit
                     </button>
                     <button
-                        onClick={handleDelete}
-                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+                        onClick={ () => setShowModal(true)}
+                        className="bg-red-500 text-white cursor-pointer px-4 py-2 rounded-md hover:bg-red-600 transition"
                     >
                         Delete
                     </button>
+                </div>
+            )}
+            {showModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+                        <h2 className="text-xl font-semibold mb-4">
+                            Delete Blog?
+                        </h2>
+
+                        <p className="text-gray-600 mb-6">
+                            Are you sure you want to delete this blog? This action cannot be undone.
+                        </p>
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="px-4 py-2 rounded-md border border-gray-300 cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={handleDelete}
+                                className="px-4 py-2 rounded-md bg-blue-600 text-white cursor-pointer"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

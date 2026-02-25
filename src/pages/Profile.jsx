@@ -232,14 +232,14 @@ const Profile = () => {
                                     <div className="flex justify-between gap-4">
                                         <button
                                             onClick={confirmLogout}
-                                            className="flex-1 bg-blue-600 hover:bg-red-700 text-white py-2 rounded-md transition"
+                                            className="flex-1 bg-blue-600 cursor-pointer text-white py-2 rounded-md transition"
                                         >
                                             Yes, Logout
                                         </button>
 
                                         <button
                                             onClick={cancelLogout}
-                                            className="flex-1 border border-gray-300 hover:bg-gray-100 py-2 rounded-md transition"
+                                            className="flex-1 border border-gray-300 cursor-pointer py-2 rounded-md transition"
                                         >
                                             Cancel
                                         </button>
